@@ -20,7 +20,7 @@ namespace DataAccess.Configs
             builder.Property(x => x.Komentar).HasMaxLength(500);
             builder.Property(x => x.Cena).HasPrecision(8, 2);
             builder.Property(x => x.TrajanjeDostave).HasConversion(typeof(long));
-            builder.Property(x => x.Status).HasConversion(typeof(string));
+            builder.Property(x => x.Status).HasDefaultValue(StatusPorudzbine.CekaDostavu).HasConversion(typeof(string));
 
             builder.HasOne(x => x.Dostavljac);
             builder.HasOne(x => x.Narucilac);

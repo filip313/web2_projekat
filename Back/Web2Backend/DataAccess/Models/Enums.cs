@@ -13,4 +13,11 @@ namespace DataAccess.Models
         DostavljaSe,
         Dostavljena
     };
+
+    public enum StatusNaloga
+    {
+        NaCekanju,
+        Odobren,
+        Odbijen
+    };
 }

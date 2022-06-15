@@ -9,7 +9,7 @@ namespace DataAccess.Models
     public class Dostavljac : UserBase
     {
         public int Id { get; set; }
-        public bool Verifikovan { get; set; }
+        public StatusNaloga StatusNaloga { get; set; }
         public List<Porudzbina> Porudzbine { get; set; }
     }
 }
