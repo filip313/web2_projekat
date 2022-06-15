@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Models
 {
-    public interface IUser
+    public abstract class UserBase
     {
         public string Username { get; set; }
         public string Email { get; set; }

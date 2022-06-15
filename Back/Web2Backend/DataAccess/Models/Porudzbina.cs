@@ -15,5 +15,9 @@ namespace DataAccess.Models
         public TimeSpan TrajanjeDostave { get; set; }
         public StatusPorudzbine Status { get; set; }
         public List<PorudzbinaProizvod> Proizvodi { get; set; }
+        public int PotrosacId { get; set; }
+        public Potrosac Narucilac { get; set; }
+        public int DostavljacId { get; set; }
+        public Dostavljac Dostavljac { get; set; }
     }
 }
