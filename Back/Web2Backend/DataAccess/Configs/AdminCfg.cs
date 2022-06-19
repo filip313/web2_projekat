@@ -16,8 +16,8 @@ namespace DataAccess.Configs
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-            builder.Property(x => x.Username).HasMaxLength(100).IsRequired(true);
             builder.HasIndex(x => x.Username).IsUnique(true);
+            builder.Property(x => x.Username).HasMaxLength(100);
             builder.Property(x => x.Email).HasMaxLength(320).IsRequired(true);
             builder.Property(x => x.Password).HasMaxLength(512).IsRequired(true);
             builder.Property(x => x.Ime).HasMaxLength(100);

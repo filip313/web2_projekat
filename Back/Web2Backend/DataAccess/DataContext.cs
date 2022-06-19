@@ -1,5 +1,6 @@
 ﻿using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +23,6 @@ namespace DataAccess
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(DataContext).Assembly);
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlite("Data Source=ServiceData.db");
-        }
+        public DataContext(DbContextOptions options) : base(options) { }
     }
 }
