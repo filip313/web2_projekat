@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess.Models
+namespace DataLayer.Models
 {
 
     public enum StatusPorudzbine
@@ -20,4 +20,11 @@ namespace DataAccess.Models
         Odobren,
         Odbijen
     };
+
+    public enum UserType
+    {
+        Admin,
+        Potrosac,
+        Dostavljac
+    }
 }

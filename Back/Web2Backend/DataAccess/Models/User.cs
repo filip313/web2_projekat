@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Models
 {
-    public abstract class UserBase
+    public class User
     {
+        public int Id { get; set; }
+        public StatusNaloga StatusNaloga { get; set; }
+        public List<Porudzbina> Porudzbine { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
@@ -15,7 +18,7 @@ namespace DataLayer.Models
         public string Prezime { get; set; }
         public DateTime DatumRodjenja { get; set; }
         public string Adresa { get; set; }
-        public string UserType { get; set; }
+        public UserType UserType { get; set; }
         public string Slika { get; set; }
     }
 }

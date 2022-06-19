@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DataAccess.Models;
+using DataLayer.Models;
 using ServiceLayer.DTOs;
 using System;
 using System.Collections.Generic;
@@ -13,9 +13,7 @@ namespace ServiceLayer.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<Admin, UserRegistrationDto>().ReverseMap();
-            CreateMap<Dostavljac, UserRegistrationDto>().ReverseMap();
-            CreateMap<Potrosac, UserRegistrationDto>().ReverseMap();
+            CreateMap<User, UserRegistrationDto>().ReverseMap();
         }
     }
 }

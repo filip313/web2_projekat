@@ -1,4 +1,4 @@
-﻿using DataAccess.Models;
+﻿using DataLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -7,13 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess
+namespace DataLayer
 {
     public class DataContext : DbContext
     {
-        public DbSet<Admin> Admini { get; set; }
-        public DbSet<Dostavljac> Dostavljaci { get; set; }
-        public DbSet<Potrosac> Potrosaci { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<Porudzbina> Porudzbine { get; set; }
         public DbSet<Proizvod> Proizvodi { get; set; }
 

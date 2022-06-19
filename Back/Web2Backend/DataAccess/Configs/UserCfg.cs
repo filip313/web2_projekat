@@ -1,4 +1,4 @@
-﻿using DataAccess.Models;
+﻿using DataLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess.Configs
+namespace DataLayer.Configs
 {
-    public class DostavljacCfg : IEntityTypeConfiguration<Dostavljac>
+    public class UserCfg : IEntityTypeConfiguration<User>
     {
-        public void Configure(EntityTypeBuilder<Dostavljac> builder)
+        public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
@@ -24,11 +24,11 @@ namespace DataAccess.Configs
             builder.Property(x => x.Prezime).HasMaxLength(100);
             builder.Property(x => x.DatumRodjenja).HasConversion(typeof(string));
             builder.Property(x => x.Adresa).HasMaxLength(200);
-            builder.Property(x => x.UserType).HasMaxLength(20);
+            builder.Property(x => x.UserType).HasConversion(typeof(string));
             builder.Property(x => x.Slika).HasMaxLength(500);
 
             builder.Property(x => x.StatusNaloga).HasDefaultValue(StatusNaloga.NaCekanju).HasConversion(typeof(string));
-            builder.HasMany(x => x.Porudzbine).WithOne(x => x.Dostavljac).HasForeignKey(x => x.DostavljacId);
+            builder.HasMany(x => x.Porudzbine).WithOne(x => x.User).HasForeignKey(x => x.UserId);
         }
     }
 }

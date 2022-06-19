@@ -1,4 +1,4 @@
-﻿using DataAccess.Models;
+﻿using DataLayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +9,7 @@ namespace DataLayer.Interfaces
 {
     public interface IUserRepo
     {
-        Admin AddAdmin(Admin newAdmin);
-        Potrosac AddPotrosac(Potrosac newPotrosac);
-        Dostavljac AddDostavljac(Dostavljac newDostavljac);
+        User AddUser(User newUser);
+        User GetUserByUsername(string username);
     }
 }

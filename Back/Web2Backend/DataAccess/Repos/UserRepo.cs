@@ -1,6 +1,5 @@
-﻿using DataAccess;
-using DataAccess.Models;
-using DataLayer.Interfaces;
+﻿using DataLayer.Interfaces;
+using DataLayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,28 +15,18 @@ namespace DataLayer.Repos
         {
             _db = db;
         }
-        public Admin AddAdmin(Admin newAdmin)
+
+        public User AddUser(User newUser)
         {
-            _db.Admini.Add(newAdmin);
+            _db.Users.Add(newUser);
             _db.SaveChanges();
 
-            return newAdmin;
+            return newUser;
         }
 
-        public Dostavljac AddDostavljac(Dostavljac newDostavljac)
+        public User GetUserByUsername(string username)
         {
-            _db.Dostavljaci.Add(newDostavljac);
-            _db.SaveChanges();
-
-            return newDostavljac;
-        }
-
-        public Potrosac AddPotrosac(Potrosac newPotrosac)
-        {
-            _db.Potrosaci.Add(newPotrosac);
-            _db.SaveChanges();
-
-            return newPotrosac;
+            return _db.Users.Where(x => x.Username == username).FirstOrDefault();
         }
     }
 }

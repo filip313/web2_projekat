@@ -1,4 +1,4 @@
-﻿using DataAccess.Models;
+﻿using DataLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess.Configs
+namespace DataLayer.Configs
 {
     public class PorudzbinaCfg : IEntityTypeConfiguration<Porudzbina>
     {
@@ -22,8 +22,7 @@ namespace DataAccess.Configs
             builder.Property(x => x.TrajanjeDostave).HasConversion(typeof(long));
             builder.Property(x => x.Status).HasDefaultValue(StatusPorudzbine.CekaDostavu).HasConversion(typeof(string));
 
-            builder.HasOne(x => x.Dostavljac);
-            builder.HasOne(x => x.Narucilac);
+            builder.HasOne(x => x.User);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
-using DataAccess;
-using DataAccess.Models;
 using DataLayer.Interfaces;
+using DataLayer.Models;
 using ServiceLayer.DTOs;
 using ServiceLayer.Interfaces;
 using System;
@@ -27,26 +26,19 @@ namespace ServiceLayer.Services
         {
             if (ValidateUserData(newUser))
             {
-                if (newUser.UserType == "Dostavljac")
-                {
-                    var dostavljac = (Dostavljac)_mapper.Map(newUser, typeof(UserRegistrationDto),
-                        typeof(Dostavljac));
-                    
-                    var user = _userRepo.AddDostavljac(dostavljac);
-                    
-                    return (UserRegistrationDto)_mapper.Map(user, typeof(Dostavljac),
-                        typeof(UserRegistrationDto));
-                }
-                else if (newUser.UserType == "Potrosac")
-                {
-                    var potrosac = (Potrosac)_mapper.Map(newUser, typeof(UserRegistrationDto),
-                        typeof(Potrosac));
+                var user = (User)_mapper.Map(newUser, typeof(UserRegistrationDto), typeof(User));
 
-                    var user = _userRepo.AddPotrosac(potrosac);
-
-                    return (UserRegistrationDto)_mapper.Map(user, typeof(Potrosac),
-                        typeof(UserRegistrationDto));
+                if(user.UserType == UserType.Admin)
+                {
+                    throw new Exception("Los zahtev!");
                 }
+                else if(_userRepo.GetUserByUsername(user.Username) != null)
+                {
+                    throw new Exception("Korisnik sa tim korisnickim imenom vec postoji!");
+                }
+
+                user = _userRepo.AddUser(user);
+                return (UserRegistrationDto)_mapper.Map(user, typeof(User), typeof(UserRegistrationDto));
             }
             else
             {
