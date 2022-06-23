@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace ServiceLayer.Interfaces
 {
-    public interface IUserService
+    public interface IProizvodService
     {
-        UserRegistrationDto Register(UserRegistrationDto newUser);
-        TokenDto Login(UserLoginDto user);
-        UserDto GetUser(int id);
+        ProizvodDto DodajProizvod(ProizvodDto noviProizvod);
+        List<ProizvodDto> GetProizvode();
     }
 }

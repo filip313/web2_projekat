@@ -24,6 +24,19 @@ namespace DataLayer.Repos
             return newUser;
         }
 
+        public User GetUserById(int id)
+        {
+            User ret;
+            if ((ret = _db.Users.Find(id)) != null)
+            {
+                return ret;
+            }
+            else
+            {
+                throw new Exception("Doslo je do greske!");
+            }
+        }
+
         public User GetUserByUsername(string username)
         {
             return _db.Users.Where(x => x.Username == username).FirstOrDefault();

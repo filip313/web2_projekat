@@ -17,6 +17,7 @@ namespace DataLayer.Configs
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
             builder.Property(x => x.Naziv).HasMaxLength(100);
+            builder.HasIndex(x => x.Naziv).IsUnique();
             builder.Property(x => x.Sastojci).HasMaxLength(300);
             builder.Property(x => x.Cena).HasPrecision(8, 2);
         }

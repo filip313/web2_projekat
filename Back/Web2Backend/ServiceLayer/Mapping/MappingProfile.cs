@@ -14,6 +14,9 @@ namespace ServiceLayer.Mapping
         public MappingProfile()
         {
             CreateMap<User, UserRegistrationDto>().ReverseMap();
+            CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<Porudzbina, PorudzbinaDto>().ReverseMap();
+            CreateMap<Proizvod, ProizvodDto>().ReverseMap();
         }
     }
 }

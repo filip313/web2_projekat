@@ -1,11 +1,15 @@
 ﻿using AutoMapper;
 using DataLayer.Interfaces;
 using DataLayer.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using ServiceLayer.DTOs;
 using ServiceLayer.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,22 +19,72 @@ namespace ServiceLayer.Services
     {
         private readonly IMapper _mapper;
         private readonly IUserRepo _userRepo;
+        private readonly IConfigurationSection _secretKey;
 
-        public UserService(IMapper mapper, IUserRepo userRepo)
+        public UserService(IMapper mapper, IUserRepo userRepo, IConfiguration config)
         {
             _mapper = mapper;
             _userRepo = userRepo;
+            _secretKey = config.GetSection("SecretKey");
+        }
+
+        public TokenDto Login (UserLoginDto user)
+        {
+            User dbUser = _userRepo.GetUserByUsername(user.Username);
+
+            if(null == dbUser)
+            {
+                throw new Exception("Korisnik sa ovim korisnickim imenom ne postoji!");
+            }
+
+            if(BCrypt.Net.BCrypt.Verify(user.Password, dbUser.Password))
+            {
+                List<Claim> claims = new List<Claim>();
+
+                if(dbUser.UserType == UserType.Admin)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, UserType.Admin.ToString()));
+                }
+                else if(dbUser.UserType == UserType.Dostavljac)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, UserType.Dostavljac.ToString()));
+                }
+                else if(dbUser.UserType == UserType.Potrosac)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, UserType.Potrosac.ToString()));
+                }
+
+                claims.Add(new Claim("id", dbUser.Id.ToString()));
+
+                SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey.Value));
+                var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                var tokenOptions = new JwtSecurityToken(
+                    issuer: "https://localhost:5002",
+                    claims: claims,
+                    expires: DateTime.Now.AddMinutes(20),
+                    signingCredentials: signingCredentials);
+
+                string token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+
+                return new TokenDto() { Token = token };
+            }
+            else
+            {
+                throw new Exception("Pogresno uneta sifra!");
+            }
+
         }
 
         public UserRegistrationDto Register(UserRegistrationDto newUser)
         {
             if (ValidateUserData(newUser))
             {
+                newUser.Password = BCrypt.Net.BCrypt.HashPassword(newUser.Password);
                 var user = (User)_mapper.Map(newUser, typeof(UserRegistrationDto), typeof(User));
 
                 if(user.UserType == UserType.Admin)
                 {
-                    throw new Exception("Los zahtev!");
+                    //throw new Exception("Los zahtev!");
                 }
                 else if(_userRepo.GetUserByUsername(user.Username) != null)
                 {
@@ -84,6 +138,13 @@ namespace ServiceLayer.Services
                 return false;
             }
 
+        }
+
+        public UserDto GetUser(int id)
+        {
+            var dbUser = _userRepo.GetUserById(id);
+
+            return (UserDto)_mapper.Map(dbUser, typeof(User), typeof(UserDto));
         }
     }
 }

@@ -7,11 +7,8 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Interfaces
 {
-    public interface IUserRepo
+    public interface IPorudzbinaRepo
     {
-        User AddUser(User newUser);
-        User GetUserByUsername(string username);
-
-        User GetUserById(int id);
+        List<Porudzbina> GetPorudzbine();
     }
 }

@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace ServiceLayer.Interfaces
 {
-    public interface IUserService
+    public interface IPorudzbinaService
     {
-        UserRegistrationDto Register(UserRegistrationDto newUser);
-        TokenDto Login(UserLoginDto user);
-        UserDto GetUser(int id);
+        List<PorudzbinaDto> GetPorudzbine();
     }
 }
