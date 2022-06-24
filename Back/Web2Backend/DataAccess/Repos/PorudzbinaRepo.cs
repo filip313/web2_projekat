@@ -1,5 +1,6 @@
 ﻿using DataLayer.Interfaces;
 using DataLayer.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,50 @@ namespace DataLayer.Repos
             _db = db;
         }
 
+        public Porudzbina AddNew(Porudzbina newPorudzbina)
+        {
+            Porudzbina toBeAdded = new Porudzbina
+            {
+                Adresa = newPorudzbina.Adresa,
+                Cena = newPorudzbina.Cena,
+                Komentar = newPorudzbina.Komentar,
+                UserId = newPorudzbina.UserId,
+                TrajanjeDostave = newPorudzbina.TrajanjeDostave,
+                Proizvodi = new List<PorudzbinaProizvod>()
+            };
+            foreach(var item in newPorudzbina.Proizvodi)
+            {
+                var proizvod = _db.Proizvodi.Find(item.Proizvod.Id);
+
+                toBeAdded.Proizvodi.Add(new PorudzbinaProizvod()
+                {
+                    Proizvod = proizvod,
+                    Porudzbina = toBeAdded,
+                    Kolicina = item.Kolicina
+                });
+            }
+
+            _db.Porudzbine.Add(toBeAdded);
+            _db.SaveChanges();
+
+            return newPorudzbina;
+        }
+
         public List<Porudzbina> GetPorudzbine()
         {
-            return _db.Porudzbine.ToList();
+            return _db.Porudzbine.Include(x => x.Proizvodi).ThenInclude(x => x.Proizvod).Include(x => x.User).ToList();
+        }
+
+        public List<Porudzbina> GetUserPorudzbine(int userId)
+        {
+            var porudzbine = _db.Porudzbine.Where(x => x.UserId == userId).Include(x => x.Proizvodi).ThenInclude(x => x.Proizvod).Include(x => x.User).ToList();
+
+            if(porudzbine == null || porudzbine.Count == 0)
+            {
+                throw new Exception("Los zahtev, porudzbina ne postoji za tog usera!");
+            }
+
+            return porudzbine;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace DataLayer.Interfaces
     {
         User AddUser(User newUser);
         User GetUserByUsername(string username);
-
         User GetUserById(int id);
+        bool DoesUserExist(int id);
     }
 }

@@ -10,5 +10,7 @@ namespace DataLayer.Interfaces
     public interface IPorudzbinaRepo
     {
         List<Porudzbina> GetPorudzbine();
+        Porudzbina AddNew(Porudzbina newPorudzbina);
+        List<Porudzbina> GetUserPorudzbine(int userId);
     }
 }

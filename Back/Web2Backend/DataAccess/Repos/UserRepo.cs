@@ -41,5 +41,12 @@ namespace DataLayer.Repos
         {
             return _db.Users.Where(x => x.Username == username).FirstOrDefault();
         }
+
+        public bool DoesUserExist(int id)
+        {
+            var user = _db.Users.Find(id);
+
+            return user != null;
+        }
     }
 }

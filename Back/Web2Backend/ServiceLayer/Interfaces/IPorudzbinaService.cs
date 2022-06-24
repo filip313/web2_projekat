@@ -10,5 +10,7 @@ namespace ServiceLayer.Interfaces
     public interface IPorudzbinaService
     {
         List<PorudzbinaDto> GetPorudzbine();
+        NovaPorudzbinaDto AddNew(NovaPorudzbinaDto novaPorudzbina);
+        List<PorudzbinaDto> GetUserPorudzbine(int userId);
     }
 }
