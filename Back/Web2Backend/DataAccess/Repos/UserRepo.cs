@@ -1,5 +1,6 @@
 ﻿using DataLayer.Interfaces;
 using DataLayer.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace DataLayer.Repos
         public User GetUserById(int id)
         {
             User ret;
-            if ((ret = _db.Users.Find(id)) != null)
+            if ((ret = _db.Users.Include(x => x.Porudzbine).Where( x => x.Id == id).FirstOrDefault()) != null)
             {
                 return ret;
             }
@@ -47,6 +48,12 @@ namespace DataLayer.Repos
             var user = _db.Users.Find(id);
 
             return user != null;
+        }
+
+        public void SaveChangedData(User user)
+        {
+            _db.Users.Update(user);
+            _db.SaveChanges();
         }
     }
 }

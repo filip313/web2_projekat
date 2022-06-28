@@ -26,7 +26,6 @@ namespace DataLayer.Repos
                 Cena = newPorudzbina.Cena,
                 Komentar = newPorudzbina.Komentar,
                 UserId = newPorudzbina.UserId,
-                TrajanjeDostave = newPorudzbina.TrajanjeDostave,
                 Proizvodi = new List<PorudzbinaProizvod>()
             };
             foreach(var item in newPorudzbina.Proizvodi)
@@ -47,6 +46,15 @@ namespace DataLayer.Repos
             return newPorudzbina;
         }
 
+        public Porudzbina GetPorudzbinaById(int id)
+        {
+            var dbPorudzbina = _db.Porudzbine.Include(x => x.Proizvodi)
+                                             .ThenInclude(x => x.Proizvod)
+                                             .FirstOrDefault();
+            
+            return dbPorudzbina;
+        }
+
         public List<Porudzbina> GetPorudzbine()
         {
             return _db.Porudzbine.Include(x => x.Proizvodi).ThenInclude(x => x.Proizvod).Include(x => x.User).ToList();
@@ -62,6 +70,12 @@ namespace DataLayer.Repos
             }
 
             return porudzbine;
+        }
+
+        public void SaveChangedData(Porudzbina porudzbina)
+        {
+            _db.Porudzbine.Update(porudzbina);
+            _db.SaveChanges();
         }
     }
 }

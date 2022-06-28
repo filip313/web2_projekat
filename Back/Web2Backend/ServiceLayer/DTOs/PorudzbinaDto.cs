@@ -14,6 +14,7 @@ namespace ServiceLayer.DTOs
         public string Komentar { get; set; }
         public decimal Cena { get; set; }
         public TimeSpan TrajanjeDostave { get; set; }
+        public DateTime VremePrihvata { get; set; }
         public string Status { get; set; }
         public List<PorudzbinaProizvodDto> Proizvodi { get; set; }
         public int UserId { get; set; }

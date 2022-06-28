@@ -30,11 +30,7 @@ namespace ServiceLayer.Services
         {
             if (IsPorudzbinaValid(novaPorudzbina))
             {
-                var random = new Random((int)DateTime.Now.Ticks);
-                TimeSpan vremeDostave = new TimeSpan(0, random.Next(15, 60),0);
-
                 var dbPorudzbina = (Porudzbina)_mapper.Map<NovaPorudzbinaDto, Porudzbina>(novaPorudzbina);
-                dbPorudzbina.TrajanjeDostave = vremeDostave;
                 dbPorudzbina = _porudzbinaRepo.AddNew(dbPorudzbina);
 
                 return (NovaPorudzbinaDto)_mapper.Map<Porudzbina, NovaPorudzbinaDto>(dbPorudzbina);
@@ -57,6 +53,44 @@ namespace ServiceLayer.Services
             var dbPorudzbine = _porudzbinaRepo.GetUserPorudzbine(userId);
 
             return _mapper.Map<List<Porudzbina>, List<PorudzbinaDto>>(dbPorudzbine);
+        }
+
+        public PorudzbinaDto Prihvati(PrihvatiPorudzbinuDto prihvatDto)
+        {
+            var dostavljac = _userRepo.GetUserById(prihvatDto.DostavljacId);
+            var porudzbina = _porudzbinaRepo.GetPorudzbinaById(prihvatDto.PorudzbinaId);
+            if(null == dostavljac || null == porudzbina)
+            {
+                throw new Exception("Los zahtev!");
+            }
+
+            if(porudzbina.Status != StatusPorudzbine.CekaDostavu)
+            {
+                throw new Exception("Nije moguce preuzeti ovu porudzbinu zato sto je vec dostavljena ili se dostavlja!");
+            }
+
+            foreach(var item in dostavljac.Porudzbine)
+            {
+                if(item.Status == StatusPorudzbine.DostavljaSe)
+                {
+                    throw new Exception($"Nije moguce preuzeti novu porudzbinu dok porudzbina {item.Id} " +
+                        $"nije zavrsena.");
+                }
+            }
+            int minuti = new Random().Next(15, 70);
+            TimeSpan trajanjeDostave = new TimeSpan(0, minuti, 0);
+            DateTime vremePrihvata = DateTime.Now;
+
+            porudzbina.TrajanjeDostave = trajanjeDostave;
+            porudzbina.VremePrihvata = vremePrihvata;
+            porudzbina.Status = StatusPorudzbine.DostavljaSe;
+
+            dostavljac.Porudzbine.Add(porudzbina);
+
+            _porudzbinaRepo.SaveChangedData(porudzbina);
+            _userRepo.SaveChangedData(dostavljac);
+
+            return _mapper.Map<PorudzbinaDto>(porudzbina);
         }
 
         private bool IsPorudzbinaValid(NovaPorudzbinaDto porudzbina)

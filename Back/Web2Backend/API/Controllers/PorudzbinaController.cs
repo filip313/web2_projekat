@@ -67,5 +67,20 @@ namespace API.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("prihvati")]
+        [Authorize(Roles = "Dostavljac")]
+        public IActionResult PrihvatiPorudzbinu([FromBody]PrihvatiPorudzbinuDto prihvatDto)
+        {
+            try
+            {
+                return Ok(_porudzbinaService.Prihvati(prihvatDto));
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
     }
 }

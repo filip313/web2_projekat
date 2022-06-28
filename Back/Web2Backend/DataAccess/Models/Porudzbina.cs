@@ -14,6 +14,7 @@ namespace DataLayer.Models
         public string Komentar { get; set; }
         public decimal Cena { get; set; }
         public TimeSpan TrajanjeDostave { get; set; }
+        public DateTime VremePrihvata{ get; set; }
         public StatusPorudzbine Status { get; set; }
         public List<PorudzbinaProizvod> Proizvodi { get; set; }
         public int UserId { get; set; }
