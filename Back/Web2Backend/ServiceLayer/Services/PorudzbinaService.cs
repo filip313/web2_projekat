@@ -84,8 +84,9 @@ namespace ServiceLayer.Services
             porudzbina.TrajanjeDostave = trajanjeDostave;
             porudzbina.VremePrihvata = vremePrihvata;
             porudzbina.Status = StatusPorudzbine.DostavljaSe;
+            porudzbina.DostavljacId = dostavljac.Id;
 
-            dostavljac.Porudzbine.Add(porudzbina);
+            dostavljac.Dostave.Add(porudzbina);
 
             _porudzbinaRepo.SaveChangedData(porudzbina);
             _userRepo.SaveChangedData(dostavljac);
@@ -101,7 +102,7 @@ namespace ServiceLayer.Services
                 ukCena += (item.Kolicina * item.Proizvod.Cena);
             }
 
-            bool userExists = _userRepo.DoesUserExist(porudzbina.UserId);
+            bool userExists = _userRepo.DoesUserExist(porudzbina.NarucilacId);
 
             if(!(porudzbina.Cena == ukCena && porudzbina.Proizvodi.Count != 0) ||
                 porudzbina.Adresa.Equals(string.Empty) ||

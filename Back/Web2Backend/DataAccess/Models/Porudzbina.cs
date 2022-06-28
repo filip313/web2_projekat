@@ -17,7 +17,9 @@ namespace DataLayer.Models
         public DateTime VremePrihvata{ get; set; }
         public StatusPorudzbine Status { get; set; }
         public List<PorudzbinaProizvod> Proizvodi { get; set; }
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public int NarucilacId { get; set; }
+        public User Narucialc { get; set; }
+        public int DostavljacId { get; set; }
+        public User Dostavljac { get; set; }
     }
 }

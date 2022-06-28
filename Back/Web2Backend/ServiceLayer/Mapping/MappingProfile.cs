@@ -21,7 +21,8 @@ namespace ServiceLayer.Mapping
                 .ReverseMap();
             CreateMap<Porudzbina, PorudzbinaDto>()
                 .ForMember(x => x.Proizvodi, act => act.MapFrom(src => src.Proizvodi))
-                .ForMember(x => x.User, act => act.MapFrom(src => src.User))
+                .ForMember(x => x.Narucilac, act => act.MapFrom(src => src.Narucialc))
+                .ForMember(x => x.Dostavljac, act => act.MapFrom(src => src.Dostavljac))
                 .ReverseMap();
             CreateMap<Proizvod, ProizvodDto>().ReverseMap();
         }

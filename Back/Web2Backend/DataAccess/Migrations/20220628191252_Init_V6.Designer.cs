@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220628154605_PorudzbinaVremePrihvata")]
-    partial class PorudzbinaVremePrihvata
+    [Migration("20220628191252_Init_V6")]
+    partial class Init_V6
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,9 +36,18 @@ namespace DataLayer.Migrations
                         .HasPrecision(8, 2)
                         .HasColumnType("decimal(8,2)");
 
+                    b.Property<int>("DostavljacId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DostavljacId1")
+                        .HasColumnType("int");
+
                     b.Property<string>("Komentar")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("NarucilacId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -49,15 +58,14 @@ namespace DataLayer.Migrations
                     b.Property<long>("TrajanjeDostave")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("VremePrihvata")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("DostavljacId");
+
+                    b.HasIndex("DostavljacId1");
 
                     b.ToTable("Porudzbine");
                 });
@@ -177,13 +185,19 @@ namespace DataLayer.Migrations
 
             modelBuilder.Entity("DataLayer.Models.Porudzbina", b =>
                 {
-                    b.HasOne("DataLayer.Models.User", "User")
+                    b.HasOne("DataLayer.Models.User", "Narucialc")
                         .WithMany("Porudzbine")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("DostavljacId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.HasOne("DataLayer.Models.User", "Dostavljac")
+                        .WithMany("Dostave")
+                        .HasForeignKey("DostavljacId1");
+
+                    b.Navigation("Dostavljac");
+
+                    b.Navigation("Narucialc");
                 });
 
             modelBuilder.Entity("DataLayer.Models.PorudzbinaProizvod", b =>
@@ -217,6 +231,8 @@ namespace DataLayer.Migrations
 
             modelBuilder.Entity("DataLayer.Models.User", b =>
                 {
+                    b.Navigation("Dostave");
+
                     b.Navigation("Porudzbine");
                 });
 #pragma warning restore 612, 618

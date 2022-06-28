@@ -11,6 +11,7 @@ namespace DataLayer.Models
         public int Id { get; set; }
         public StatusNaloga StatusNaloga { get; set; }
         public List<Porudzbina> Porudzbine { get; set; }
+        public List<Porudzbina> Dostave { get; set; } = new List<Porudzbina>();
         public string Username { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }

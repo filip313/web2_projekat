@@ -13,6 +13,6 @@ namespace ServiceLayer.DTOs
         public string Komentar { get; set; }
         public decimal Cena { get; set; }
         public List<PorudzbinaProizvodDto> Proizvodi { get; set; }
-        public int UserId { get; set; }
+        public int NarucilacId { get; set; }
     }
 }

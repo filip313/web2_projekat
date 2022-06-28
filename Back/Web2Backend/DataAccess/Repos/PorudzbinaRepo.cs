@@ -25,7 +25,8 @@ namespace DataLayer.Repos
                 Adresa = newPorudzbina.Adresa,
                 Cena = newPorudzbina.Cena,
                 Komentar = newPorudzbina.Komentar,
-                UserId = newPorudzbina.UserId,
+                NarucilacId = newPorudzbina.NarucilacId,
+                DostavljacId = newPorudzbina.NarucilacId,
                 Proizvodi = new List<PorudzbinaProizvod>()
             };
             foreach(var item in newPorudzbina.Proizvodi)
@@ -57,19 +58,28 @@ namespace DataLayer.Repos
 
         public List<Porudzbina> GetPorudzbine()
         {
-            return _db.Porudzbine.Include(x => x.Proizvodi).ThenInclude(x => x.Proizvod).Include(x => x.User).ToList();
+            return _db.Porudzbine.Include(x => x.Proizvodi).ThenInclude(x => x.Proizvod).Include(x => x.Narucialc).ToList();
         }
 
         public List<Porudzbina> GetUserPorudzbine(int userId)
         {
-            var porudzbine = _db.Porudzbine.Where(x => x.UserId == userId).Include(x => x.Proizvodi).ThenInclude(x => x.Proizvod).Include(x => x.User).ToList();
+            List<Porudzbina> ret = null;
+            var user = _db.Users.Find(userId);
+            if(user.UserType == UserType.Potrosac)
+            {
+                ret = _db.Porudzbine.Where(x => x.NarucilacId == userId).Include(x => x.Proizvodi).ThenInclude(x => x.Proizvod).Include(x => x.Dostavljac).ToList();
+            }
+            else if(user.UserType == UserType.Dostavljac)
+            {
+                ret = _db.Porudzbine.Where(x => x.DostavljacId == userId).Include(x => x.Proizvodi).ThenInclude(x => x.Proizvod).Include(x => x.Narucialc).ToList();
+            }
 
-            if(porudzbine == null || porudzbine.Count == 0)
+            if(ret == null)
             {
                 throw new Exception("Los zahtev, porudzbina ne postoji za tog usera!");
             }
 
-            return porudzbine;
+            return ret;
         }
 
         public void SaveChangedData(Porudzbina porudzbina)
