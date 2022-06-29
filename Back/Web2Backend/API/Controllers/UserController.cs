@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    [Route("api/user")]
+    [Route("api/[controller]")]
     [ApiController]
     public class UserController : Controller
     {
@@ -36,12 +36,12 @@ namespace API.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register([FromBody] UserRegistrationDto newUser)
+        public IActionResult Register([FromForm] UserRegistrationDto newUser)
         {
             try
             {
                 var createdUser = _userService.Register(newUser);
-                return Created("user/register", createdUser);
+                return Created("api/user/register", createdUser);
             }
             catch (Exception e)
             {
@@ -49,13 +49,43 @@ namespace API.Controllers
             }
         }
 
-        [HttpGet("/{id}")]
+        [HttpGet("{id}")]
         [Authorize]
         public IActionResult GetUser(int id)
         {
             try
             {
                 return Ok(_userService.GetUser(id));
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("dostavljaci")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Dostavljaci()
+        {
+            try
+            {
+                return Ok(_userService.GetDostavljace());
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("verifikuj")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Verifikacija([FromBody] VerifikacijaDto info)
+        {
+            try
+            {
+                return Ok(_userService.Verifikuj(info));
             }
             catch(Exception e)
             {

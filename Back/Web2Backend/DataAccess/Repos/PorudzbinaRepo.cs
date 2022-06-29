@@ -47,10 +47,21 @@ namespace DataLayer.Repos
             return newPorudzbina;
         }
 
+        public List<Porudzbina> GetNove()
+        {
+            return _db.Porudzbine.Where(x => x.Status == StatusPorudzbine.CekaDostavu)
+                                 .Include(x => x.Proizvodi).ThenInclude(x => x.Proizvod)
+                                 .Include(x => x.Narucialc)
+                                 .ToList();
+        }
+
         public Porudzbina GetPorudzbinaById(int id)
         {
-            var dbPorudzbina = _db.Porudzbine.Include(x => x.Proizvodi)
+            var dbPorudzbina = _db.Porudzbine.Where(x => x.Id == id)
+                                             .Include(x => x.Proizvodi)
                                              .ThenInclude(x => x.Proizvod)
+                                             .Include(x => x.Narucialc)
+                                             .Include(x => x.Dostavljac)
                                              .FirstOrDefault();
             
             return dbPorudzbina;
@@ -58,7 +69,7 @@ namespace DataLayer.Repos
 
         public List<Porudzbina> GetPorudzbine()
         {
-            return _db.Porudzbine.Include(x => x.Proizvodi).ThenInclude(x => x.Proizvod).Include(x => x.Narucialc).ToList();
+            return _db.Porudzbine.Include(x => x.Proizvodi).ThenInclude(x => x.Proizvod).Include(x => x.Narucialc).Include(x => x.Dostavljac).ToList();
         }
 
         public List<Porudzbina> GetUserPorudzbine(int userId)

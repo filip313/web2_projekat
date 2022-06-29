@@ -91,6 +91,12 @@ namespace ServiceLayer.Services
                     throw new Exception("Korisnik sa tim korisnickim imenom vec postoji!");
                 }
 
+                string putanja = "";
+                if(newUser.File.Length > 0)
+                {
+                    putanja = _userRepo.SaveImage(newUser.File, newUser.Username);
+                }
+                user.Slika = putanja;
                 user = _userRepo.AddUser(user);
                 return (UserRegistrationDto)_mapper.Map(user, typeof(User), typeof(UserRegistrationDto));
             }
@@ -145,6 +151,33 @@ namespace ServiceLayer.Services
             var dbUser = _userRepo.GetUserById(id);
 
             return (UserDto)_mapper.Map(dbUser, typeof(User), typeof(UserDto));
+        }
+
+        public List<UserDto> GetDostavljace()
+        {
+            var dostavljaci = _userRepo.GetDostavljace();
+
+            return _mapper.Map<List<UserDto>>(dostavljaci);
+        }
+
+        public UserDto Verifikuj(VerifikacijaDto info)
+        {
+            var dostavljac = _userRepo.GetUserById(info.DostavljacId);
+
+            if(dostavljac == null)
+            {
+                throw new Exception("Trazeni dostavljac ne postoji!");
+            }
+            else if(dostavljac.Verifikovan == info.Verifikacija || dostavljac.UserType != UserType.Dostavljac)
+            {
+                throw new Exception("Nije moguce izmeniti ovu verifikaciju!");
+            }
+
+            dostavljac.Verifikovan = info.Verifikacija;
+
+            _userRepo.SaveChangedData(dostavljac);
+
+            return _mapper.Map<UserDto>(dostavljac);
         }
     }
 }

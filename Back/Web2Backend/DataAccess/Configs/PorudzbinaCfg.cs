@@ -23,7 +23,7 @@ namespace DataLayer.Configs
             builder.Property(x => x.Status).HasDefaultValue(StatusPorudzbine.CekaDostavu).HasConversion(typeof(string));
 
             builder.HasOne(x => x.Dostavljac).WithMany(x => x.Dostave).HasForeignKey(x => x.DostavljacId).OnDelete(DeleteBehavior.NoAction);
-            builder.HasOne(x => x.Narucialc).WithMany(x => x.Porudzbine).HasForeignKey(x => x.DostavljacId).OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(x => x.Narucialc).WithMany(x => x.Porudzbine).HasForeignKey(x => x.NarucilacId).OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

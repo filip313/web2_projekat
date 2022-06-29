@@ -12,9 +12,8 @@ namespace DataLayer.Interfaces
         List<Porudzbina> GetPorudzbine();
         Porudzbina AddNew(Porudzbina newPorudzbina);
         List<Porudzbina> GetUserPorudzbine(int userId);
-
         Porudzbina GetPorudzbinaById(int id);
-
         void SaveChangedData(Porudzbina porudzbina);
+        List<Porudzbina> GetNove();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DataLayer.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace DataLayer.Interfaces
         User GetUserById(int id);
         bool DoesUserExist(int id);
         void SaveChangedData(User user);
+        List<User> GetDostavljace();
+        string SaveImage(IFormFile slika, string username);
     }
 }

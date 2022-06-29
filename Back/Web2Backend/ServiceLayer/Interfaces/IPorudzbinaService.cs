@@ -14,5 +14,7 @@ namespace ServiceLayer.Interfaces
         List<PorudzbinaDto> GetUserPorudzbine(int userId);
 
         PorudzbinaDto Prihvati(PrihvatiPorudzbinuDto prihvatDto);
+        List<PorudzbinaDto> GetNove();
+        PorudzbinaDto ZavrsiPorudzbinu(int id);
     }
 }

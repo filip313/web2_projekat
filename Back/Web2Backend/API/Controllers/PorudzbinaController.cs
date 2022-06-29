@@ -35,7 +35,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [Route("nova")]
+        [Route("create")]
         [Authorize(Roles ="Potrosac")]
         public IActionResult NovaPorudzbina([FromBody]NovaPorudzbinaDto porudzbina)
         {
@@ -54,7 +54,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("user/{userId}")]
-        [Authorize(Roles = "Potrosac")]
+        [Authorize]
         public IActionResult NovaPorudzbina(int userId)
         {
             try
@@ -75,6 +75,36 @@ namespace API.Controllers
             try
             {
                 return Ok(_porudzbinaService.Prihvati(prihvatDto));
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("nove")]
+        [Authorize(Roles = "Dostavljac")]
+        public IActionResult GetNovePorudzbine()
+        {
+            try
+            {
+                return Ok(_porudzbinaService.GetNove());
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("zavrsena")]
+        [Authorize]
+        public IActionResult ZavrsiPorudzbinu([FromBody] int porudzbinaId)
+        {
+            try
+            {
+                return Ok(_porudzbinaService.ZavrsiPorudzbinu(porudzbinaId));
             }
             catch(Exception e)
             {

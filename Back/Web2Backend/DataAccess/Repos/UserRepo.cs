@@ -1,8 +1,10 @@
 ﻿using DataLayer.Interfaces;
 using DataLayer.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -54,6 +56,22 @@ namespace DataLayer.Repos
         {
             _db.Users.Update(user);
             _db.SaveChanges();
+        }
+
+        public List<User> GetDostavljace()
+        {
+            return _db.Users.Where(x => x.UserType == UserType.Dostavljac).ToList();
+        }
+
+        public string SaveImage(IFormFile slika, string username)
+        {
+            string path = Path.Combine( Path.GetDirectoryName(Environment.CurrentDirectory),"DataAccess","Images", username);
+            using (Stream fileStream = new FileStream(path, FileMode.Create))
+            {
+                slika.CopyTo(fileStream);
+            }
+
+            return path;
         }
     }
 }

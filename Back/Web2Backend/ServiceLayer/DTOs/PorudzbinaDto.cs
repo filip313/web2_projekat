@@ -17,7 +17,6 @@ namespace ServiceLayer.DTOs
         public DateTime VremePrihvata { get; set; }
         public string Status { get; set; }
         public List<PorudzbinaProizvodDto> Proizvodi { get; set; }
-        public int UserId { get; set; }
         public UserDto Narucilac { get; set; }
         public UserDto Dostavljac { get; set; }
     }

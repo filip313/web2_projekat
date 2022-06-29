@@ -12,5 +12,7 @@ namespace ServiceLayer.Interfaces
         UserRegistrationDto Register(UserRegistrationDto newUser);
         TokenDto Login(UserLoginDto user);
         UserDto GetUser(int id);
+        List<UserDto> GetDostavljace();
+        UserDto Verifikuj(VerifikacijaDto info);
     }
 }

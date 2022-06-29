@@ -26,8 +26,7 @@ namespace DataLayer.Configs
             builder.Property(x => x.Adresa).HasMaxLength(200);
             builder.Property(x => x.UserType).HasConversion(typeof(string));
             builder.Property(x => x.Slika).HasMaxLength(500);
-
-            builder.Property(x => x.StatusNaloga).HasDefaultValue(StatusNaloga.NaCekanju).HasConversion(typeof(string));
+            builder.Property(x => x.Verifikovan).HasDefaultValue(false);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,6 @@ namespace ServiceLayer.DTOs
         public DateTime DatumRodjenja { get; set; }
         public string Adresa { get; set; }
         public string UserType { get; set; }
-        public string Slika { get; set; }
+        public IFormFile File { get; set; }
     }
 }

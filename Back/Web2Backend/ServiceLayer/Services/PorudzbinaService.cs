@@ -41,6 +41,13 @@ namespace ServiceLayer.Services
             }
         }
 
+        public List<PorudzbinaDto> GetNove()
+        {
+            var porudzbine = _porudzbinaRepo.GetNove();
+
+            return _mapper.Map<List<PorudzbinaDto>>(porudzbine);
+        }
+
         public List<PorudzbinaDto> GetPorudzbine()
         {
             var data = _porudzbinaRepo.GetPorudzbine();
@@ -63,10 +70,13 @@ namespace ServiceLayer.Services
             {
                 throw new Exception("Los zahtev!");
             }
-
             if(porudzbina.Status != StatusPorudzbine.CekaDostavu)
             {
                 throw new Exception("Nije moguce preuzeti ovu porudzbinu zato sto je vec dostavljena ili se dostavlja!");
+            }
+            if (!dostavljac.Verifikovan)
+            {
+                throw new Exception("Samo verifkovani dostavljaci mogu da prihvataju porudzbine!");
             }
 
             foreach(var item in dostavljac.Porudzbine)
@@ -84,12 +94,34 @@ namespace ServiceLayer.Services
             porudzbina.TrajanjeDostave = trajanjeDostave;
             porudzbina.VremePrihvata = vremePrihvata;
             porudzbina.Status = StatusPorudzbine.DostavljaSe;
+            porudzbina.Dostavljac = dostavljac;
             porudzbina.DostavljacId = dostavljac.Id;
 
             dostavljac.Dostave.Add(porudzbina);
 
             _porudzbinaRepo.SaveChangedData(porudzbina);
             _userRepo.SaveChangedData(dostavljac);
+
+            return _mapper.Map<PorudzbinaDto>(porudzbina);
+        }
+
+        public PorudzbinaDto ZavrsiPorudzbinu(int id)
+        {
+            var porudzbina = _porudzbinaRepo.GetPorudzbinaById(id);
+
+            if(porudzbina == null || porudzbina.Status != StatusPorudzbine.DostavljaSe)
+            {
+                throw new Exception("Nije moguce zavrsiti ovu porudzbinu!");
+            }
+
+            DateTime now = DateTime.Now;
+            if(porudzbina.VremePrihvata.Add(porudzbina.TrajanjeDostave) > now)
+            {
+                throw new Exception("Nije moguce zavrsiti dostavu pre isteka dostave");
+            }
+
+            porudzbina.Status = StatusPorudzbine.Dostavljena;
+            _porudzbinaRepo.SaveChangedData(porudzbina);
 
             return _mapper.Map<PorudzbinaDto>(porudzbina);
         }

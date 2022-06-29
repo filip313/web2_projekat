@@ -14,13 +14,6 @@ namespace DataLayer.Models
         Dostavljena
     };
 
-    public enum StatusNaloga
-    {
-        NaCekanju,
-        Odobren,
-        Odbijen
-    };
-
     public enum UserType
     {
         Admin,
