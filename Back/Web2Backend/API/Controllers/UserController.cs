@@ -87,6 +87,21 @@ namespace API.Controllers
             {
                 return Ok(_userService.Verifikuj(info));
             }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("izmeni")]
+        [Authorize]
+        public IActionResult IzmeniProfil([FromForm] UserIzmenaDto izmenjenUser)
+        {
+            try
+            {
+                return Ok(_userService.IzmeniUsera(izmenjenUser));
+            }
             catch(Exception e)
             {
                 return BadRequest(e.Message);

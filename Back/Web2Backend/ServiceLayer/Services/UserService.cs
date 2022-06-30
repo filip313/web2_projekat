@@ -179,5 +179,46 @@ namespace ServiceLayer.Services
 
             return _mapper.Map<UserDto>(dostavljac);
         }
+
+        public UserDto IzmeniUsera(UserIzmenaDto izmena)
+        {
+            var dbUser = _userRepo.GetUserById(izmena.Id);
+            if (dbUser != _userRepo.GetUserByUsername(izmena.Username))
+            {
+                throw new Exception("Los zahtev");
+            }
+
+            if (BCrypt.Net.BCrypt.Verify(izmena.StariPassword, dbUser.Password))
+            {
+                if (!izmena.NoviPassword.Equals(string.Empty))
+                {
+                    dbUser.Password = BCrypt.Net.BCrypt.HashPassword(izmena.NoviPassword);
+                }
+
+                if(izmena.Ime != null)
+                    dbUser.Ime = izmena.Ime.Equals(string.Empty) ? dbUser.Ime : izmena.Ime;
+                if(izmena.Prezime != null)
+                    dbUser.Prezime = izmena.Prezime.Equals(string.Empty) || izmena.Prezime == null ? dbUser.Prezime : izmena.Prezime;
+                if(izmena.Email != null)
+                    dbUser.Email = (izmena.Ime.Equals(string.Empty) && IsValidEmail(izmena.Email)) ? dbUser.Email : izmena.Email;
+                if (izmena.DatumRodjenja != null)
+                {
+                    dbUser.DatumRodjenja = (DateTime)izmena.DatumRodjenja;
+                }
+                if(izmena.Adresa != null)
+                    dbUser.Adresa = izmena.Adresa.Equals(string.Empty) || izmena.Adresa == null ? dbUser.Adresa : izmena.Adresa;
+                if (izmena.File != null)
+                {
+                    string path = _userRepo.SaveImage(izmena.File, dbUser.Username);
+                    dbUser.Slika = path;
+                }
+
+                _userRepo.SaveChangedData(dbUser);
+
+                return _mapper.Map<UserDto>(dbUser);
+            }
+
+            throw new Exception("Greska prilikom autentifikacije!");
+        }
     }
 }
