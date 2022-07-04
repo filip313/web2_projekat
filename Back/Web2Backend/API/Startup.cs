@@ -109,6 +109,18 @@ namespace API
             {
                 options.AddPolicy("UserId", policy => policy.RequireClaim("id"));
             });
+
+            /// CORS
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "cors", builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200")
+                           .AllowAnyHeader()
+                           .AllowAnyMethod()
+                           .AllowCredentials();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -124,6 +136,7 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors("cors");
 
             app.UseAuthentication();
             app.UseAuthorization();
