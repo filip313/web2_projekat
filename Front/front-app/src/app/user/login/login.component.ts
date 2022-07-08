@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Login } from 'src/app/shared/models/login.model';
 import { Token } from 'src/app/shared/models/token.model';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { UserService } from 'src/app/shared/services/user.service';
 
 @Component({
@@ -11,23 +11,27 @@ import { UserService } from 'src/app/shared/services/user.service';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private service:UserService ) { }
-
-  loginForm = new FormGroup({
-    username: new FormControl("", Validators.required),
-    password: new FormControl("", Validators.required),
-  });
+  loginForm: FormGroup;
+  
+  constructor(private service:UserService, private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
+    this.loginForm = this.formBuilder.group({
+      username: ['',[
+        Validators.required,
+      ]],
+      password: ['',[
+        Validators.required,
+      ]]
+    });
+
+    this.loginForm.valueChanges.subscribe(console.log);
   }
 
   onSubmit(){
     let login:Login = new Login();
-    let temp;
-    if((temp = this.loginForm.controls['username'].value) != null)
-      login.username = temp;
-    if((temp = this.loginForm.controls['password'].value) != null)
-      login.password = temp;
+    login.password = this.loginForm.controls['password'].value;
+    login.username = this.loginForm.controls['username'].value;
 
     this.service.login(login).subscribe(
       (data : Token) => {

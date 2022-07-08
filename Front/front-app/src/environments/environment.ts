@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   serverURL:"https:/localhost:44397/",
-  allowdDomains:['localhost:44397']
+  allowdDomains:['localhost:44397'],
+  imageDisplayPrefix : "data:image/jpeg;base64,", 
 };
 
 /*

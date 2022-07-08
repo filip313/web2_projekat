@@ -1,15 +1,11 @@
 <form [formGroup]="loginForm" mb-4 autocomplete="off">
-  <div class="form-group">
-    <label>Username</label>
-    <input class="form-control" formControlName="username" >
-  </div>
-  <div class="form-group">
-    <label>Password</label>
-    <input type="password" class="form-control"  formControlName="password">
-  </div>
-  <div class="form-row">
-    <div class="form-group col-md-8 offset-md-2">
-      <button type="button" class="btn btn-lg btn-light btn-block" (click)="onSubmit()">Login</button>
-    </div>
-  </div>
+  <mat-form-field>
+    <input matInput placeholder="username" formControlName="username"> 
+  </mat-form-field>
+  <br>
+  <mat-form-field>
+    <input matInput type="password" placeholder="password" formControlName="password">
+  </mat-form-field>
+  <br>
+  <button mat-raised-button [disabled]="loginForm.invalid" color="primary" (click)="onSubmit()">Uloguj se!</button>
 </form>

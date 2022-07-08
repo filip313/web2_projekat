@@ -1,0 +1,66 @@
+<form [formGroup]="registerForm" autocomplete="off">
+    <mat-form-field>
+        <input matInput placeholder="Username" formControlName="username">
+
+        <mat-error *ngIf="username?.touched && username?.invalid">
+            Korisnicko ime mora biti duze od 3 karaktera!
+        </mat-error>
+    </mat-form-field>
+    
+    <br>
+    <mat-form-field>
+        <input matInput type="email" placeholder="Email" formControlName="email">
+        
+        <mat-error *ngIf="email?.dirty&& email?.invalid">
+            Molim vas unesite ispravan email!
+        </mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <input matInput placeholder="Sifra" type="password" formControlName="password">
+        <mat-error *ngIf="password?.errors?.['minlength'] && password?.touched">
+            Sifra mora imati bar 8 karaktera!
+        </mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <input matInput placeholder="Potvrdi Sifru" type="password" formControlName="passwordConfirm">
+        <mat-error *ngIf="registerForm.hasError('password-missmatch')">
+            Sifre se ne podudaraju!
+        </mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <input matInput placeholder="Ime" formControlName="ime">
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <input matInput placeholder="Prezime" formControlName="prezime">
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <input matInput [matDatepicker]="picker" placeholder="Datum Rodjenja" formControlName="datumRodjenja">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="datumRodjenja?.errors?.['badAge']&& datumRodjenja?.touched">
+            Korisnik mora imati minimum 18 godina!
+        </mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <input matInput placeholder="Adresa" formControlName="adresa">
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-select placeholder="Tip Korisnika" formControlName="userType">
+           <mat-option value="Potrosac">Potrosac</mat-option> 
+           <mat-option value="Dostavljac">Dostavljac</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <br> 
+    <button type="button" mat-raised-button (click)="fileInput.click()">Izaberi sliku</button>
+    <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file">
+
+    <br>
+    <button mat-raised-button color="primary" [disabled]="registerForm.invalid" (click)="onSubmit()">Registruj Se!</button>
+</form>

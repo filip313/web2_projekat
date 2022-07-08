@@ -8,6 +8,7 @@ using ServiceLayer.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -149,6 +150,11 @@ namespace ServiceLayer.Services
         public UserDto GetUser(int id)
         {
             var dbUser = _userRepo.GetUserById(id);
+            if(!dbUser.Slika.Equals(string.Empty))
+            {
+                byte[] imageByte = File.ReadAllBytes(dbUser.Slika);
+                dbUser.Slika = Convert.ToBase64String(imageByte);
+            }
 
             return (UserDto)_mapper.Map(dbUser, typeof(User), typeof(UserDto));
         }
