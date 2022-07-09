@@ -62,15 +62,15 @@ export class RegisterComponent implements OnInit {
   onSubmit(){
       console.log(this.registerForm);
       let registerData = new FormData();
-      registerData.append('username', this.registerForm.controls['username'].value);
-      registerData.append('password', this.registerForm.controls['password'].value);
-      registerData.append('email', this.registerForm.controls['email'].value);
-      registerData.append('ime', this.registerForm.controls['ime'].value);
-      registerData.append('prezime', this.registerForm.controls['prezime'].value);
-      registerData.append('datumRodjenja' ,this.registerForm.controls['datumRodjenja'].value);
-      registerData.append('userType' ,this.registerForm.controls['userType'].value);
-      registerData.append('file',this.registerForm.controls['file'].value);
-      registerData.append('adresa',this.registerForm.controls['adresa'].value);
+      registerData.append('Username', this.registerForm.controls['username'].value);
+      registerData.append('Password', this.registerForm.controls['password'].value);
+      registerData.append('Email', this.registerForm.controls['email'].value);
+      registerData.append('Ime', this.registerForm.controls['ime'].value);
+      registerData.append('Prezime', this.registerForm.controls['prezime'].value);
+      registerData.append('DatumRodjenja' ,this.registerForm.controls['datumRodjenja'].value);
+      registerData.append('UserType' ,this.registerForm.controls['userType'].value);
+      registerData.append('File',this.registerForm.controls['file'].value);
+      registerData.append('Adresa',this.registerForm.controls['adresa'].value);
 
     this.service.register(registerData).subscribe(
     (data:Register) =>{
