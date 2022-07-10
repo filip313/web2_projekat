@@ -1,4 +1,4 @@
-<form [formGroup]="registerForm" autocomplete="off">
+<form [formGroup]="changeForm" autocomplete="off">
     <mat-form-field>
         <input matInput placeholder="Username" formControlName="username">
 
@@ -17,19 +17,27 @@
     </mat-form-field>
     <br>
     <mat-form-field>
-        <input matInput placeholder="Sifra" type="password" formControlName="password">
-        <mat-error *ngIf="password?.errors?.['minlength'] && password?.touched">
-            Sifra mora imati bar 8 karaktera!
+        <input matInput placeholder="Trenutna Sifra" type="password" formControlName="stariPassword">
+        <mat-error *ngIf="password?.invalid && password?.touched">
+            Morate uneti staru sifru kako bi ste izvrsili promenu.
         </mat-error>
     </mat-form-field>
     <br>
     <mat-form-field>
-        <input matInput placeholder="Potvrdi Sifru" type="password" formControlName="passwordConfirm">
-        <mat-error *ngIf="registerForm.errors?.['password-missmatch']">
+        <input matInput placeholder="Nova Sifra" type="password" formControlName="noviPassword">
+        <mat-error *ngIf="changeForm.errors?.['password-missmatch']">
             Sifre se ne podudaraju
         </mat-error>
     </mat-form-field>
     <br>
+    <mat-form-field>
+        <input matInput placeholder="Potrvrdi novu sifru" type="password" formControlName="noviPasswordConfirm">
+        <mat-error *ngIf="changeForm.errors?.['password-missmatch']">
+            Sifre se ne podudaraju
+        </mat-error>
+    </mat-form-field>
+    <br>
+
     <mat-form-field>
         <input matInput placeholder="Ime" formControlName="ime">
     </mat-form-field>
@@ -51,16 +59,10 @@
         <input matInput placeholder="Adresa" formControlName="adresa">
     </mat-form-field>
     <br>
-    <mat-form-field>
-        <mat-select placeholder="Tip Korisnika" formControlName="userType">
-           <mat-option value="Potrosac">Potrosac</mat-option> 
-           <mat-option value="Dostavljac">Dostavljac</mat-option>
-        </mat-select>
-    </mat-form-field>
-    <br> 
+
     <button type="button" mat-raised-button (click)="fileInput.click()">Izaberi sliku</button>
     <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file">
-
+    <img width="100" height="100" [src]='slika'/>
     <br>
-    <button mat-raised-button color="primary"[disabled]="registerForm.invalid" (click)="onSubmit()">Registruj Se!</button>
+    <button mat-raised-button color="primary"[disabled]="changeForm.invalid" (click)="onSubmit()">Promeni podatke!</button>
 </form>

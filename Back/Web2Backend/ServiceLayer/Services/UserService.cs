@@ -93,7 +93,7 @@ namespace ServiceLayer.Services
                 }
 
                 string putanja = "";
-                if(newUser.File.Length > 0)
+                if(newUser.File != null && newUser.File.Length > 0)
                 {
                     putanja = _userRepo.SaveImage(newUser.File, newUser.Username);
                 }
@@ -196,7 +196,7 @@ namespace ServiceLayer.Services
 
             if (BCrypt.Net.BCrypt.Verify(izmena.StariPassword, dbUser.Password))
             {
-                if (!izmena.NoviPassword.Equals(string.Empty))
+                if (izmena.NoviPassword != null && !izmena.NoviPassword.Equals(string.Empty))
                 {
                     dbUser.Password = BCrypt.Net.BCrypt.HashPassword(izmena.NoviPassword);
                 }
@@ -218,9 +218,13 @@ namespace ServiceLayer.Services
                     string path = _userRepo.SaveImage(izmena.File, dbUser.Username);
                     dbUser.Slika = path;
                 }
-
                 _userRepo.SaveChangedData(dbUser);
-
+                if (!dbUser.Slika.Equals(string.Empty))
+                {
+                    byte[] imageByte = File.ReadAllBytes(dbUser.Slika);
+                    dbUser.Slika = Convert.ToBase64String(imageByte);
+                }
+                
                 return _mapper.Map<UserDto>(dbUser);
             }
 

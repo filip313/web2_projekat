@@ -3,6 +3,7 @@ import { Login } from 'src/app/shared/models/login.model';
 import { Token } from 'src/app/shared/models/token.model';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { UserService } from 'src/app/shared/services/user.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,7 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
   
-  constructor(private service:UserService, private formBuilder: FormBuilder) { }
+  constructor(private service:UserService, private formBuilder: FormBuilder, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -36,8 +37,10 @@ export class LoginComponent implements OnInit {
     this.service.login(login).subscribe(
       (data : Token) => {
         console.log(data);
+        localStorage.setItem('token', data.token);
       },
       error =>{
+        this.toastr.error(error.error);
         console.log(error);
       }
     )

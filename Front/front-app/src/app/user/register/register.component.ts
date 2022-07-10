@@ -13,8 +13,9 @@ import { CustomPasswordValidator } from 'src/app/shared/validators/password.vali
 export class RegisterComponent implements OnInit {
 
   registerForm: FormGroup;
+  file:File;
   constructor(private service: UserService, private formBuilder:FormBuilder) { }
-
+  
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
       username: ['',[
@@ -52,11 +53,15 @@ export class RegisterComponent implements OnInit {
       ]],
       file:['',[]]
       
-    },[CustomPasswordValidator]);
+    },
+    {
+      validators:[CustomPasswordValidator]
+    });
   }
 
   onFileSelected(event:any){
     this.registerForm.controls['file'] = event.target.files;
+    this.file = event.target.files[0];
   }
 
   onSubmit(){
@@ -67,9 +72,9 @@ export class RegisterComponent implements OnInit {
       registerData.append('Email', this.registerForm.controls['email'].value);
       registerData.append('Ime', this.registerForm.controls['ime'].value);
       registerData.append('Prezime', this.registerForm.controls['prezime'].value);
-      registerData.append('DatumRodjenja' ,this.registerForm.controls['datumRodjenja'].value);
+      registerData.append('DatumRodjenja' , JSON.stringify(this.registerForm.controls['datumRodjenja'].value).substring(1,11));
       registerData.append('UserType' ,this.registerForm.controls['userType'].value);
-      registerData.append('File',this.registerForm.controls['file'].value);
+      registerData.append('File',this.file);
       registerData.append('Adresa',this.registerForm.controls['adresa'].value);
 
     this.service.register(registerData).subscribe(

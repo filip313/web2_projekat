@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Login } from '../models/login.model';
 import { Token } from '../models/token.model';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Register } from '../models/register.model';
+import { UserData } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,16 @@ export class UserService {
   }
 
   register(registerData: FormData):Observable<Register>{
-    return this.http.post<Register>(environment.serverURL + 'api/User/register', registerData)
+    return this.http.post<Register>(environment.serverURL + 'api/User/register', registerData);
+  }
+  getUserData(userId:number):Observable<UserData>{
+    return this.http.get<UserData>(environment.serverURL + 'api/User/' + userId.toString())
+  };
+
+  changeUserData(changeData:FormData):Observable<UserData>{
+    return this.http.post<UserData>(environment.serverURL + 'api/User/izmeni', changeData);
+  }
+  getDostavljace():Observable<[UserData]>{
+    return this.http.get<[UserData]>(environment.serverURL + 'api/User/dostavljaci');
   }
 }
