@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using ServiceLayer;
 using ServiceLayer.Interfaces;
 using ServiceLayer.Mapping;
 using ServiceLayer.Services;
@@ -121,6 +122,12 @@ namespace API
                            .AllowCredentials();
                 });
             });
+
+            /// EMAIL
+            var emailConfig = Configuration.GetSection("EmailConfig")
+                                            .Get<EmailConfig>();
+            services.AddSingleton(emailConfig);
+            services.AddScoped<IEmailSender, EmailSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

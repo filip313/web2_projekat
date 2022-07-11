@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Register } from '../models/register.model';
 import { UserData } from '../models/user.model';
+import { Verifkacija } from '../models/verifikacija.model';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +29,10 @@ export class UserService {
   changeUserData(changeData:FormData):Observable<UserData>{
     return this.http.post<UserData>(environment.serverURL + 'api/User/izmeni', changeData);
   }
-  getDostavljace():Observable<[UserData]>{
-    return this.http.get<[UserData]>(environment.serverURL + 'api/User/dostavljaci');
+  getDostavljace():Observable<UserData[]>{
+    return this.http.get<UserData[]>(environment.serverURL + 'api/User/dostavljaci');
+  }
+  verifikujDostavljaca(data:Verifkacija):Observable<UserData>{
+    return this.http.post<UserData>(environment.serverURL + 'api/User/verifikuj', data);
   }
 }

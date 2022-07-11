@@ -18,6 +18,8 @@ import { MatChipsModule} from '@angular/material/chips';
 import { RegisterComponent } from './user/register/register.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatListModule } from '@angular/material/list';
+import { MatTableModule } from '@angular/material/table';
 
 import { ToastrModule } from 'ngx-toastr';
 import { ChangeComponent } from './user/change/change.component';
@@ -55,6 +57,8 @@ export function tokenGetter(){
     MatChipsModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatListModule,
+    MatTableModule,
     ToastrModule.forRoot({
       progressBar : true
     }),

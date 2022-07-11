@@ -21,12 +21,14 @@ namespace ServiceLayer.Services
         private readonly IMapper _mapper;
         private readonly IUserRepo _userRepo;
         private readonly IConfigurationSection _secretKey;
+        private readonly IEmailSender _emailSender;
 
-        public UserService(IMapper mapper, IUserRepo userRepo, IConfiguration config)
+        public UserService(IMapper mapper, IUserRepo userRepo, IConfiguration config, IEmailSender sender)
         {
             _mapper = mapper;
             _userRepo = userRepo;
             _secretKey = config.GetSection("SecretKey");
+            _emailSender = sender;
         }
 
         public TokenDto Login (UserLoginDto user)
@@ -179,6 +181,12 @@ namespace ServiceLayer.Services
                 throw new Exception("Nije moguce izmeniti ovu verifikaciju!");
             }
 
+            string trenutniStatus = dostavljac.Verifikovan ? "Verifikovan" : "Odbijen";
+            string noviStatus = info.Verifikacija ? "Verifikovan" : "Odbijen";
+
+            var message = new Message(new string[] { dostavljac.Email }, "Obavestenje o promeni statusa vaseg naloga.", $"Doslo je do promene statusa vaseg naloga.\n" +
+                $"Novi statu je {noviStatus}.\nPrethodni status je {trenutniStatus}.");
+            _emailSender.SendEmail(message);
             dostavljac.Verifikovan = info.Verifikacija;
 
             _userRepo.SaveChangedData(dostavljac);
