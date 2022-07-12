@@ -20,6 +20,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
 
 import { ToastrModule } from 'ngx-toastr';
 import { ChangeComponent } from './user/change/change.component';
@@ -28,6 +30,11 @@ import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { PorudzbinaComponent } from './porudzbina/porudzbina.component';
 import { AdminComponent } from './admin/admin.component';
 import { DostavljaciComponent } from './admin/dostavljaci/dostavljaci.component';
+import { ProizvodService } from './shared/services/proizvod.service';
+import { ProizvodComponent } from './proizvod/proizvod.component';
+import { AddProizvodComponent } from './proizvod/add-proizvod/add-proizvod.component';
+import { AdminPorudzbineComponent } from './admin/admin-porudzbine/admin-porudzbine.component';
+import { UserPorudzbineComponent } from './porudzbina/user-porudzbine/user-porudzbine.component';
 export function tokenGetter(){
   return localStorage.getItem('token');
 }
@@ -41,7 +48,11 @@ export function tokenGetter(){
     ChangeComponent,
     PorudzbinaComponent,
     AdminComponent,
-    DostavljaciComponent
+    DostavljaciComponent,
+    ProizvodComponent,
+    AddProizvodComponent,
+    AdminPorudzbineComponent,
+    UserPorudzbineComponent,
   ],
   imports: [
     BrowserModule,
@@ -59,6 +70,8 @@ export function tokenGetter(){
     MatNativeDateModule,
     MatListModule,
     MatTableModule,
+    MatDialogModule,
+    MatCardModule,
     ToastrModule.forRoot({
       progressBar : true
     }),
@@ -72,7 +85,8 @@ export function tokenGetter(){
       multi: true,
     },
     { provide:JWT_OPTIONS, useValue:JWT_OPTIONS},
-    JwtHelperService
+    JwtHelperService,
+    ProizvodService
   ],
   bootstrap: [AppComponent]
 })

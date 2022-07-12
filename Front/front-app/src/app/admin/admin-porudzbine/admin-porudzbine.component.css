@@ -1,0 +1,13 @@
+table {
+    width: 100%;
+}
+
+.primary{
+    background-color: green;
+}
+.accent{
+    background-color: yellow;
+}
+.warn{
+    background-color: red;
+}

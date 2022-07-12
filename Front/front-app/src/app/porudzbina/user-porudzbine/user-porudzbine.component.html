@@ -1,0 +1,37 @@
+<table mat-table [dataSource]="porudzbine" class="mat-elevation-z8">
+    <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>id</th>
+        <td mat-cell *matCellDef="let por">{{ por.id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="user">
+        <div *ngIf="potrosac">
+            <th mat-header-cell *matHeaderCellDef>Dostavljac</th>
+            <td mat-cell *matCellDef="let por">{{ por.dostavljac.username }}</td>
+        </div>
+        <div *ngIf="!potrosac">
+            <th mat-header-cell *matHeaderCellDef>Potrosac</th>
+            <td mat-cell *matCellDef="let por">{{ por.narucilac.username }}</td>
+        </div>
+    </ng-container>
+    <ng-container matColumnDef="adresa">
+        <th mat-header-cell *matHeaderCellDef>Adresa</th>
+        <td mat-cell *matCellDef="let por">{{ por.adresa}}</td>
+    </ng-container>
+    <ng-container matColumnDef="ukCena">
+        <th mat-header-cell *matHeaderCellDef>Ukupna Cena</th>
+        <td mat-cell *matCellDef="let por">{{ por.cena}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="prihvat">
+        <th mat-header-cell *matHeaderCellDef>Vreme prijema</th>
+        <td mat-cell *matCellDef="let por">{{ por.vremePrihvata.toLocaleString()}}</td>
+    </ng-container>
+    <ng-container matColumnDef="trajanje">
+        <th mat-header-cell *matHeaderCellDef>Trajanje dostave (min)</th>
+        <td mat-cell *matCellDef="let por">{{ por.trajanjeDostave.totalMinutes }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="cols"></tr>
+    <tr mat-row *matRowDef="let row; columns:cols;"></tr>
+</table>

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    [Route("api/proizvod")]
+    [Route("api/[controller]")]
     public class ProizvodController : Controller
     {
         private IProizvodService _proizvodService;
@@ -21,7 +21,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [Route("proizvod/dodaj")]
+        [Route("add")]
         [Authorize(Roles = "Admin")]
         public IActionResult DodajProizvod([FromBody] ProizvodDto proizvod)
         {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    [Route("api/porudzbina")]
+    [Route("api/[controller]")]
     public class PorudzbinaController : Controller
     {
         private IPorudzbinaService _porudzbinaService;
@@ -98,7 +98,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [Route("zavrsena")]
+        [Route("zavrsi")]
         [Authorize]
         public IActionResult ZavrsiPorudzbinu([FromBody] int porudzbinaId)
         {

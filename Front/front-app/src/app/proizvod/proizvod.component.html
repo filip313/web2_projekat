@@ -1,0 +1,35 @@
+<table mat-table [dataSource]="proizvodi" class="mat-elevation-z8">
+    <ng-container matColumnDef="naziv">
+        <th mat-header-cell *matHeaderCellDef>Naziv</th>
+        <td mat-cell *matCellDef="let proizvod">{{ proizvod.naziv }}</td>
+        <td mat-footer-cell *matFooterCellDef>
+            <button mat-raised-button color="primary">Dodaj</button>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="cena">
+        <th mat-header-cell *matHeaderCellDef>Cena</th>
+        <td mat-cell *matCellDef="let proizvod">{{ proizvod.cena}}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <ng-container matColumnDef="sastojci">
+        <th mat-header-cell *matHeaderCellDef>Sastojci</th>
+        <td mat-cell *matCellDef="let proizvod">{{ proizvod.sastojci }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+    
+    <ng-container matColumnDef="dugme">
+        <th mat-header-cell [attr.colspan]="3" *matHeaderCellDef></th>
+        <td mat-footer-cell *matFooterCellDef colspan="3">
+            <button mat-raised-button color="primary" (click)="dodaj()">Dodaj</button>
+        </td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="cols"></tr>
+    <tr mat-row *matRowDef="let row; columns: cols;"></tr>
+    <div *ngIf="admin">
+    <tr mat-footer-row *matFooterRowDef="['dugme']; sticky: true "></tr>
+    </div>
+</table>
