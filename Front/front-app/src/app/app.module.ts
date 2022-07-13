@@ -22,6 +22,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 import { ToastrModule } from 'ngx-toastr';
 import { ChangeComponent } from './user/change/change.component';
@@ -35,6 +37,9 @@ import { ProizvodComponent } from './proizvod/proizvod.component';
 import { AddProizvodComponent } from './proizvod/add-proizvod/add-proizvod.component';
 import { AdminPorudzbineComponent } from './admin/admin-porudzbine/admin-porudzbine.component';
 import { UserPorudzbineComponent } from './porudzbina/user-porudzbine/user-porudzbine.component';
+import { NovaPorudzbinaComponent } from './porudzbina/nova-porudzbina/nova-porudzbina.component';
+import { TrenutnaPorudzbinaComponent } from './porudzbina/trenutna-porudzbina/trenutna-porudzbina.component';
+import { KorpaItemComponent } from './proizvod/korpa-item/korpa-item.component';
 export function tokenGetter(){
   return localStorage.getItem('token');
 }
@@ -53,6 +58,9 @@ export function tokenGetter(){
     AddProizvodComponent,
     AdminPorudzbineComponent,
     UserPorudzbineComponent,
+    NovaPorudzbinaComponent,
+    TrenutnaPorudzbinaComponent,
+    KorpaItemComponent,
   ],
   imports: [
     BrowserModule,
@@ -72,6 +80,8 @@ export function tokenGetter(){
     MatTableModule,
     MatDialogModule,
     MatCardModule,
+    MatIconModule,
+    MatGridListModule,
     ToastrModule.forRoot({
       progressBar : true
     }),

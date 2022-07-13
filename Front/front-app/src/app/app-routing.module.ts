@@ -10,6 +10,8 @@ import { ChangeComponent } from './user/change/change.component';
 import { LoginComponent } from './user/login/login.component';
 import { RegisterComponent } from './user/register/register.component';
 import { UserComponent } from './user/user.component';
+import { NovaPorudzbinaComponent } from './porudzbina/nova-porudzbina/nova-porudzbina.component';
+import { TrenutnaPorudzbinaComponent } from './porudzbina/trenutna-porudzbina/trenutna-porudzbina.component';
 
 const routes: Routes = [
   {
@@ -37,6 +39,8 @@ const routes: Routes = [
     children:
     [
       { path: 'zavrsene', component:UserPorudzbineComponent},
+      { path: 'new', component:NovaPorudzbinaComponent},
+      { path: 'trenutna', component:TrenutnaPorudzbinaComponent}
     ]
   }
 ];

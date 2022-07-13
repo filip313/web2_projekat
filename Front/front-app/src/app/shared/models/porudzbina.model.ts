@@ -8,7 +8,7 @@ export class Porudzbina{
         komentar:string = "";
         cena:number;
         trajanjeDostave:any;
-        vremePrihvata:Time;
+        vremePrihvata:Date;
         status:string="";
         Proizvodi: PorudzbinaProizvod[];
         narucilac:UserData;

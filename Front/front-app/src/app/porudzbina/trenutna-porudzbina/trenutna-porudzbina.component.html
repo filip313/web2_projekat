@@ -1,0 +1,21 @@
+<mat-card>
+    <mat-card-header>
+       <mat-card-title>Trenutna Porudzbina</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div *ngIf="trenutnaPorudzbina != null">
+            <p>Prikaz porudzbine</p>
+        </div>
+        <div *ngIf="trenutnaPorudzbina == null">
+            <mat-card-subtitle>Ne postoji trenutna porudzbina. Klikni na dugme za porucivanje kako bi napravio novu porudzbinu!</mat-card-subtitle>
+        </div>
+    </mat-card-content>
+    <mat-divider inset></mat-divider>
+    <mat-card-actions>
+      <div *ngIf="trenutnaPorudzbina == null">
+        <button mat-raised-button color="accent" (click)="showNovaPorudzbina()">Nova Porudzbina!</button>
+      </div>
+    </mat-card-actions>
+    <mat-card-footer>
+    </mat-card-footer>
+  </mat-card>
