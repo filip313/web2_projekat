@@ -26,7 +26,7 @@ export class PorudzbinaService {
     return this.http.post<Porudzbina>(environment.serverURL + "api/Porudzbina/prihvati", data);
   }
   getNovePorudzbine():Observable<Porudzbina[]>{
-    return this.http.get<Porudzbina[]>(environment.serverURL + 'api/Porudzbine/nove');
+    return this.http.get<Porudzbina[]>(environment.serverURL + 'api/Porudzbina/nove');
   }
   zavrsiPorudzbinu(porudzbinaId:number):Observable<Porudzbina>{
     return this.http.post<Porudzbina>(environment.serverURL + 'api/Porudzbina/zavrsi', porudzbinaId);

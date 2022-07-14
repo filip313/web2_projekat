@@ -4,15 +4,53 @@
     </mat-card-header>
     <mat-card-content>
         <div *ngIf="trenutnaPorudzbina != null">
-            <p>Prikaz porudzbine</p>
+          <div *ngIf="dostavljac">
+            <h3>Narucilac: {{ trenutnaPorudzbina.narucilac.username }}</h3>
+          </div>
+          <div *ngIf="!dostavljac">
+            <h3>Dostavljac: {{ trenutnaPorudzbina.dostavljac.username }} </h3>
+          </div>
+            <h4>Adresa: {{ trenutnaPorudzbina.adresa }}</h4>
+            <h4>Cena: {{ trenutnaPorudzbina.cena}}</h4>
+
+            <table mat-table [dataSource]="trenutnaPorudzbina.proizvodi" class="mat-elevation-z8">
+              <ng-container matColumnDef="naziv">
+                  <th mat-header-cell *matHeaderCellDef>Naziv</th>
+                  <td mat-cell *matCellDef="let proizvod">{{ proizvod.proizvod.naziv }}</td>
+              </ng-container>
+          
+              <ng-container matColumnDef="cena">
+                  <th mat-header-cell *matHeaderCellDef>Cena</th>
+                  <td mat-cell *matCellDef="let proizvod">{{ proizvod.proizvod.cena}}</td>
+              </ng-container>
+          
+              <ng-container matColumnDef="kolicina">
+                  <th mat-header-cell *matHeaderCellDef>Kolicina</th>
+                  <td mat-cell *matCellDef="let proizvod">{{ proizvod.kolicina}}</td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="cols"></tr>
+              <tr mat-row *matRowDef="let row; columns: cols;"></tr>
+          </table>
+        <br>
+        <mat-divider></mat-divider>
+        <p>Trajanje dostave: {{ minuti }} : {{ sekunde }}</p>
         </div>
         <div *ngIf="trenutnaPorudzbina == null">
-            <mat-card-subtitle>Ne postoji trenutna porudzbina. Klikni na dugme za porucivanje kako bi napravio novu porudzbinu!</mat-card-subtitle>
+            <mat-card-subtitle>
+              <div *ngIf="cekajuDostavu.length <= 0">
+                Ne postoji trenutna porudzbina. <span *ngIf="!dostavljac">Klikni na dugme za porucivanje kako bi napravio novu porudzbinu!</span>
+              </div>
+              <div *ngIf="cekajuDostavu.length > 0">
+                Dostavljac jos nije preuzeo vasu dostavu. <br>
+                Broj porudzbina koje cekaju dostavljaca je {{cekajuDostavu.length}}
+              </div>
+            </mat-card-subtitle>
         </div>
     </mat-card-content>
     <mat-divider inset></mat-divider>
     <mat-card-actions>
-      <div *ngIf="trenutnaPorudzbina == null">
+      <div *ngIf="trenutnaPorudzbina == null && !dostavljac">
         <button mat-raised-button color="accent" (click)="showNovaPorudzbina()">Nova Porudzbina!</button>
       </div>
     </mat-card-actions>

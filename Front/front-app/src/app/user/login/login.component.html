@@ -1,3 +1,4 @@
+<div>
 <form [formGroup]="loginForm" mb-4 autocomplete="off">
   <mat-form-field>
     <input matInput placeholder="username" formControlName="username"> 
@@ -8,4 +9,8 @@
   </mat-form-field>
   <br>
   <button mat-raised-button [disabled]="loginForm.invalid" color="primary" (click)="onSubmit()">Uloguj se!</button>
+  <br>
+  <br>
+  <button mat-raised-button color="accent" routerLink="/user/register">Registruj se!</button>
 </form>
+</div>

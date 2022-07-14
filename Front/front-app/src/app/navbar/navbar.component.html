@@ -1,0 +1,27 @@
+<mat-toolbar>
+    <span>Kafana Slozna Braca</span>
+    <span class="spacer"></span> 
+    <span *ngIf="!ulogovan">
+     <a mat-raised-button routerLink="/user/login" color="primary">Login</a>
+     <a routerLink="/user/register" mat-raised-button color="accent">Registracija</a>
+    </span>
+    <span *ngIf="ulogovan && admin" (click)="osvezi()">
+        <a mat-raised-button routerLink="/admin/dostavljaci">Pregled dostavljaca</a>
+        <a mat-raised-button routerLink="/admin/porudzbine">Pregled porudzbina</a>
+        <a mat-raised-button routerLink="/proizvodi">Proizvodi</a>
+    </span>
+    <span *ngIf="ulogovan && (potrosac || dostavljac)">
+        <a mat-raised-button routerLink="/porudzbina/zavrsene">Pregled zavrsenih porudzbina</a>
+        <a mat-raised-button routerLink="/porudzbina/trenutna">Trenutna porudzbina</a>
+    </span>
+    <span *ngIf="ulogovan && potrosac">
+        <a mat-raised-button routerLink="/porudzbina/poruci">Poruci</a>
+    </span>
+    <span *ngIf="ulogovan && dostavljac">
+        <a mat-raised-button routerLink="/porudzbina/nove">Nove porudzbine</a>
+    </span>
+    <span *ngIf="ulogovan" (click)="osvezi()">
+        <a mat-raised-button routerLink="/user/change" color="accent">Profil</a>
+        <a mat-raised-button color="warn" (click)="logout()">Logout</a>
+    </span>
+</mat-toolbar>

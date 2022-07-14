@@ -10,7 +10,7 @@ export class Porudzbina{
         trajanjeDostave:any;
         vremePrihvata:Date;
         status:string="";
-        Proizvodi: PorudzbinaProizvod[];
+        proizvodi: PorudzbinaProizvod[];
         narucilac:UserData;
         dostavljac:UserData;
 }

@@ -4,6 +4,8 @@ import { Token } from 'src/app/shared/models/token.model';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { UserService } from 'src/app/shared/services/user.service';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from 'src/app/auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +16,8 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
   
-  constructor(private service:UserService, private formBuilder: FormBuilder, private toastr: ToastrService) { }
+  constructor(private service:UserService, private formBuilder: FormBuilder, private toastr: ToastrService,
+     private auth:AuthService, private router:Router) { }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -25,8 +28,25 @@ export class LoginComponent implements OnInit {
         Validators.required,
       ]]
     });
+    if(!this.auth.isUserLoggedIn()){
 
-    this.loginForm.valueChanges.subscribe(console.log);
+      this.loginForm.valueChanges.subscribe(console.log);
+    }
+    else{
+      if(this.auth.isUserAdmin()){
+          this.router.navigateByUrl('admin/porudzbine')
+      }
+      else if(this.auth.isUserDostavljac()){
+        this.router.navigateByUrl('porudzbina/nove');
+      }
+      else if(this.auth.isUserPotrosac()){
+        this.router.navigateByUrl('porudzbina/poruci');
+      }
+      else{
+        //odradi logout
+      }
+    }
+
   }
 
   onSubmit(){
@@ -38,6 +58,8 @@ export class LoginComponent implements OnInit {
       (data : Token) => {
         console.log(data);
         localStorage.setItem('token', data.token);
+        sessionStorage.setItem('token', data.token);
+        this.ngOnInit();
       },
       error =>{
         this.toastr.error(error.error);

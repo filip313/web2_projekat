@@ -10,10 +10,20 @@ import { ChangeComponent } from './user/change/change.component';
 import { LoginComponent } from './user/login/login.component';
 import { RegisterComponent } from './user/register/register.component';
 import { UserComponent } from './user/user.component';
-import { NovaPorudzbinaComponent } from './porudzbina/nova-porudzbina/nova-porudzbina.component';
 import { TrenutnaPorudzbinaComponent } from './porudzbina/trenutna-porudzbina/trenutna-porudzbina.component';
+import { NapraviPorudzbinuComponent } from './porudzbina/napravi-porudzbinu/napravi-porudzbinu.component';
+import { NovePorudzbineComponent } from './porudzbina/nove-porudzbine/nove-porudzbine.component';
+import { AdminGuardGuard } from './auth/guards/admin-guard.guard';
+import { PotrosacGuard } from './auth/guards/potrosac.guard';
+import { environment } from 'src/environments/environment';
+import { AdminPotrosacGuard } from './auth/guards/admin-potrosac.guard';
+import { PotrosacDostavljacGuard } from './auth/guards/potrosac-dostavljac.guard';
+import { DostavljacGuard } from './auth/guards/dostavljac.guard';
 
 const routes: Routes = [
+  {
+    path: '', redirectTo: '/user/login', pathMatch:'full'
+  },
   {
     path: 'user', component: UserComponent,
     children:
@@ -24,23 +34,24 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'admin', component: AdminComponent,
+    path: 'admin', component: AdminComponent, canActivate:[AdminGuardGuard], 
     children:
     [
-      { path: 'dostavljaci', component:DostavljaciComponent},
-      { path: 'porudzbine', component:AdminPorudzbineComponent}
+      { path: 'dostavljaci', component:DostavljaciComponent, },
+      { path: 'porudzbine', component:AdminPorudzbineComponent,}
     ]
   },
   {
-    path:'proizvodi', component: ProizvodComponent
+    path:'proizvodi', component: ProizvodComponent, canActivate:[AdminPotrosacGuard], 
   },
   {
-    path:'porudzbina', component:PorudzbinaComponent,
+    path:'porudzbina', component:PorudzbinaComponent, canActivate:[PotrosacDostavljacGuard],
     children:
     [
-      { path: 'zavrsene', component:UserPorudzbineComponent},
-      { path: 'new', component:NovaPorudzbinaComponent},
-      { path: 'trenutna', component:TrenutnaPorudzbinaComponent}
+      { path: 'zavrsene', component:UserPorudzbineComponent, canActivate:[PotrosacDostavljacGuard]},
+      { path: 'poruci', component:NapraviPorudzbinuComponent, canActivate:[PotrosacGuard]},
+      { path: 'trenutna', component:TrenutnaPorudzbinaComponent, canActivate:[PotrosacDostavljacGuard]},
+      { path: 'nove', component:NovePorudzbineComponent , canActivate:[DostavljacGuard]},
     ]
   }
 ];

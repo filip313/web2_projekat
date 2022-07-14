@@ -24,6 +24,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { ToastrModule } from 'ngx-toastr';
 import { ChangeComponent } from './user/change/change.component';
@@ -37,9 +39,16 @@ import { ProizvodComponent } from './proizvod/proizvod.component';
 import { AddProizvodComponent } from './proizvod/add-proizvod/add-proizvod.component';
 import { AdminPorudzbineComponent } from './admin/admin-porudzbine/admin-porudzbine.component';
 import { UserPorudzbineComponent } from './porudzbina/user-porudzbine/user-porudzbine.component';
-import { NovaPorudzbinaComponent } from './porudzbina/nova-porudzbina/nova-porudzbina.component';
 import { TrenutnaPorudzbinaComponent } from './porudzbina/trenutna-porudzbina/trenutna-porudzbina.component';
 import { KorpaItemComponent } from './proizvod/korpa-item/korpa-item.component';
+import { NapraviPorudzbinuComponent } from './porudzbina/napravi-porudzbinu/napravi-porudzbinu.component';
+import { NovePorudzbineComponent } from './porudzbina/nove-porudzbine/nove-porudzbine.component';
+import { AdminGuardGuard } from './auth/guards/admin-guard.guard';
+import { PotrosacGuard } from './auth/guards/potrosac.guard';
+import { AdminPotrosacGuard } from './auth/guards/admin-potrosac.guard';
+import { PotrosacDostavljacGuard } from './auth/guards/potrosac-dostavljac.guard';
+import { AuthService } from './auth/auth.service';
+import { NavbarComponent } from './navbar/navbar.component';
 export function tokenGetter(){
   return localStorage.getItem('token');
 }
@@ -58,9 +67,11 @@ export function tokenGetter(){
     AddProizvodComponent,
     AdminPorudzbineComponent,
     UserPorudzbineComponent,
-    NovaPorudzbinaComponent,
+    NapraviPorudzbinuComponent,
     TrenutnaPorudzbinaComponent,
     KorpaItemComponent,
+    NovePorudzbineComponent,
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,
@@ -82,6 +93,8 @@ export function tokenGetter(){
     MatCardModule,
     MatIconModule,
     MatGridListModule,
+    MatSidenavModule,
+    MatToolbarModule,
     ToastrModule.forRoot({
       progressBar : true
     }),
@@ -96,7 +109,12 @@ export function tokenGetter(){
     },
     { provide:JWT_OPTIONS, useValue:JWT_OPTIONS},
     JwtHelperService,
-    ProizvodService
+    ProizvodService,
+    AuthService,
+    AdminGuardGuard,
+    PotrosacGuard,
+    AdminPotrosacGuard,
+    PotrosacDostavljacGuard
   ],
   bootstrap: [AppComponent]
 })

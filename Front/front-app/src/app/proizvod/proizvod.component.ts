@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
+import { AuthService } from '../auth/auth.service';
 import { PorudzbinaProizvod } from '../shared/models/porudzbinaproizvod.model';
 import { Proizvod } from '../shared/models/proizovd.model';
 import { ProizvodService } from '../shared/services/proizvod.service';
@@ -20,16 +21,14 @@ export class ProizvodComponent implements OnInit {
   proizvodi:Proizvod[];
   cols=['naziv', 'cena', 'sastojci'];
   constructor(private proizvodService:ProizvodService, private formBuilder:FormBuilder,
-    private toastr:ToastrService, private jwt: JwtHelperService, private dialog:MatDialog) { }
+    private toastr:ToastrService, private auth:AuthService, private dialog:MatDialog) { }
 
   @Output() dodatEvent = new EventEmitter<PorudzbinaProizvod>();
 
 
   ngOnInit(): void {
-    let token = localStorage.getItem('token');
-    let dekoded = this.jwt.decodeToken(token?token:"");
-    this.admin = (dekoded[environment.userRoleKey] == "Admin")?true: false;
-    if(dekoded[environment.userRoleKey] == "Potrosac"){
+    this.admin = this.auth.isUserAdmin(); 
+    if(this.auth.isUserPotrosac()){
       this.cols.push('dodaj');
     }
 
