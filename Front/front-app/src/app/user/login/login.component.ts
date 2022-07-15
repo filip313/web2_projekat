@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { GoogleApiService } from 'src/app/shared/services/google-api.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   
   constructor(private service:UserService, private formBuilder: FormBuilder, private toastr: ToastrService,
-     private auth:AuthService, private router:Router,
+     private auth:AuthService, private router:Router, private google: GoogleApiService,
      private snackBar:MatSnackBar) { }
 
   ngOnInit(): void {
@@ -69,6 +70,7 @@ export class LoginComponent implements OnInit {
     )
   }
 
+  googleLogin(){
+    this.google.startLogin();
+  }
 }
-
-export class Bar{}

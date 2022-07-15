@@ -17,7 +17,8 @@ export function CustomPasswordValidator(control: FormGroup): {[key:string]:boole
 export function CustomNewPasswordValidator(control: FormGroup):{[key:string]:boolean} | null{
     const password = control.get('noviPassword')?.value;
     const passwordConfirm = control.get('noviPasswordConfirm')?.value;
-
+    console.log(password);
+    console.log(passwordConfirm);
     if(password && passwordConfirm){
         if(password == passwordConfirm){
             return null;

@@ -31,6 +31,15 @@ namespace ServiceLayer.Services
             if (IsPorudzbinaValid(novaPorudzbina))
             {
                 var dbPorudzbina = (Porudzbina)_mapper.Map<NovaPorudzbinaDto, Porudzbina>(novaPorudzbina);
+                var porudzbine = _porudzbinaRepo.GetUserPorudzbine(novaPorudzbina.NarucilacId);
+
+                foreach (var item in porudzbine)
+                {
+                    if(item.Status == StatusPorudzbine.DostavljaSe || item.Status == StatusPorudzbine.CekaDostavu)
+                    {
+                        throw new Exception("Nije moguce praviti novu dostavu dok se trenutna ne zavrsi!");
+                    }
+                }
                 dbPorudzbina = _porudzbinaRepo.AddNew(dbPorudzbina);
 
                 return (NovaPorudzbinaDto)_mapper.Map<Porudzbina, NovaPorudzbinaDto>(dbPorudzbina);
@@ -79,7 +88,7 @@ namespace ServiceLayer.Services
                 throw new Exception("Samo verifkovani dostavljaci mogu da prihvataju porudzbine!");
             }
 
-            foreach(var item in dostavljac.Porudzbine)
+            foreach(var item in dostavljac.Dostave)
             {
                 if(item.Status == StatusPorudzbine.DostavljaSe)
                 {

@@ -30,7 +30,7 @@ namespace DataLayer.Repos
         public User GetUserById(int id)
         {
             User ret;
-            if ((ret = _db.Users.Include(x => x.Porudzbine).Where( x => x.Id == id).FirstOrDefault()) != null)
+            if ((ret = _db.Users.Include(x => x.Porudzbine).Include(x => x.Dostave).Where( x => x.Id == id).FirstOrDefault()) != null)
             {
                 return ret;
             }

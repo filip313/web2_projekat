@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { Register } from 'src/app/shared/models/register.model';
 import { UserService } from 'src/app/shared/services/user.service';
 import { CustomValidacijaRodjenja } from 'src/app/shared/validators/datum.validator';
@@ -17,7 +18,7 @@ export class RegisterComponent implements OnInit {
   file:File;
   slika:string;
   constructor(private service: UserService, private formBuilder:FormBuilder,
-    private snackBar:MatSnackBar) { }
+    private snackBar:MatSnackBar, private router:Router) { }
   
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
@@ -88,7 +89,7 @@ export class RegisterComponent implements OnInit {
 
     this.service.register(registerData).subscribe(
     (data:Register) =>{
-      console.log(data);
+      this.router.navigateByUrl('user/login');
     },
     error =>{
       this.snackBar.open(error.error, "", { duration: 2000,} );

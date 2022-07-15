@@ -50,9 +50,8 @@ import { AdminPotrosacGuard } from './auth/guards/admin-potrosac.guard';
 import { PotrosacDostavljacGuard } from './auth/guards/potrosac-dostavljac.guard';
 import { AuthService } from './auth/auth.service';
 import { NavbarComponent } from './navbar/navbar.component';
-export function tokenGetter(){
-  return localStorage.getItem('token');
-}
+
+import { OAuthModule } from 'angular-oauth2-oidc';
 
 @NgModule({
   declarations: [
@@ -100,7 +99,7 @@ export function tokenGetter(){
     ToastrModule.forRoot({
       progressBar : true
     }),
-    
+    OAuthModule.forRoot() 
   ],
   providers: [
     UserService,
