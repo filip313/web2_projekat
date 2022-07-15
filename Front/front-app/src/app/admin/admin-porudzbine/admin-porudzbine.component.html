@@ -1,3 +1,4 @@
+<div>
 <table mat-table [dataSource]="porudzbine" class="mat-elevation-z8">
     <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef>id</th>
@@ -26,3 +27,4 @@
     <tr mat-header-row *matHeaderRowDef="cols"></tr>
     <tr mat-row *matRowDef="let row; columns: cols;"></tr>
 </table>
+</div>

@@ -6,6 +6,7 @@ import { UserService } from 'src/app/shared/services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,8 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   
   constructor(private service:UserService, private formBuilder: FormBuilder, private toastr: ToastrService,
-     private auth:AuthService, private router:Router) { }
+     private auth:AuthService, private router:Router,
+     private snackBar:MatSnackBar) { }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -43,7 +45,7 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl('porudzbina/poruci');
       }
       else{
-        //odradi logout
+        this.auth.logout();
       }
     }
 
@@ -62,10 +64,11 @@ export class LoginComponent implements OnInit {
         this.ngOnInit();
       },
       error =>{
-        this.toastr.error(error.error);
-        console.log(error);
+        this.snackBar.open(error.error, "", { duration: 2000,} );
       }
     )
   }
 
 }
+
+export class Bar{}

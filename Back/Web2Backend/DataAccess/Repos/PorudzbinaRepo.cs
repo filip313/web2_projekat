@@ -24,6 +24,7 @@ namespace DataLayer.Repos
             {
                 Adresa = newPorudzbina.Adresa,
                 Cena = newPorudzbina.Cena,
+                CenaDostave = newPorudzbina.CenaDostave,
                 Komentar = newPorudzbina.Komentar,
                 NarucilacId = newPorudzbina.NarucilacId,
                 DostavljacId = newPorudzbina.NarucilacId,

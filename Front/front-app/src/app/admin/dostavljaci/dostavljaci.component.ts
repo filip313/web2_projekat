@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { UserData } from 'src/app/shared/models/user.model';
@@ -14,7 +15,7 @@ export class DostavljaciComponent implements OnInit {
 
   dostavljaci:UserData[];
   cols = ['username', 'ime', 'prezime', 'email', 'dugme'];
-  constructor(private userService: UserService, private router: Router, private toastr: ToastrService) { }
+  constructor(private userService: UserService, private router: Router, private snackBar: MatSnackBar) { }
   
   ngOnInit(): void {
     this.userService.getDostavljace().subscribe(
@@ -23,7 +24,9 @@ export class DostavljaciComponent implements OnInit {
         this.dostavljaci = data;
       },
       error =>{
-        this.router.navigateByUrl('/user/login')
+        if(error.status == 401)
+          this.router.navigateByUrl('/user/login')
+          this.snackBar.open(error.error, "", { duration: 2000,} );
       }
     )
   }
@@ -42,8 +45,11 @@ export class DostavljaciComponent implements OnInit {
         }
       },
       error =>{
-        this.toastr.error(error.error);
-      }
+        if(error.status == 401){
+          this.router.navigateByUrl('/user/login')
+        }
+              this.snackBar.open(error.error, "", { duration: 2000,} );
+              }
     )
   }
 

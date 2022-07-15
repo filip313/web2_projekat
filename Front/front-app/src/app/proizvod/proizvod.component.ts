@@ -1,6 +1,8 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
@@ -21,7 +23,8 @@ export class ProizvodComponent implements OnInit {
   proizvodi:Proizvod[];
   cols=['naziv', 'cena', 'sastojci'];
   constructor(private proizvodService:ProizvodService, private formBuilder:FormBuilder,
-    private toastr:ToastrService, private auth:AuthService, private dialog:MatDialog) { }
+    private toastr:ToastrService, private auth:AuthService, private dialog:MatDialog, private router:Router,
+    private snackBar:MatSnackBar) { }
 
   @Output() dodatEvent = new EventEmitter<PorudzbinaProizvod>();
 
@@ -38,13 +41,16 @@ export class ProizvodComponent implements OnInit {
         console.log(data);
       },
       error => {
-        this.toastr.error(error.error);
+        if(error.status == 401){
+          this.router.navigateByUrl('/user/login')
+        }
+       this.snackBar.open(error.error, "", { duration: 2000,} ); 
       }
     )
   }
 
   dodaj(){
-    this.dialog.open(AddProizvodComponent, {width:'50%', height:'45%'}).afterClosed().subscribe( data =>{
+    this.dialog.open(AddProizvodComponent, {width:'50%', height:'45%', panelClass:'panel'}).afterClosed().subscribe( data =>{
         this.ngOnInit();
       }
     );

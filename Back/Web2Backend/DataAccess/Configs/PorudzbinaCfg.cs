@@ -18,7 +18,8 @@ namespace DataLayer.Configs
 
             builder.Property(x => x.Adresa).HasMaxLength(200);
             builder.Property(x => x.Komentar).HasMaxLength(500);
-            builder.Property(x => x.Cena).HasPrecision(8, 2);
+            builder.Property(x => x.Cena).HasPrecision(8, 2); 
+            builder.Property(x => x.CenaDostave).HasPrecision(8, 2);
             builder.Property(x => x.TrajanjeDostave).HasConversion(typeof(long));
             builder.Property(x => x.Status).HasDefaultValue(StatusPorudzbine.CekaDostavu).HasConversion(typeof(string));
 

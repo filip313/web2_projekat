@@ -7,6 +7,8 @@ import { CustomNewPasswordValidator } from 'src/app/shared/validators/password.v
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
+import { AuthService } from 'src/app/auth/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-change',
   templateUrl: './change.component.html',
@@ -37,13 +39,11 @@ export class ChangeComponent implements OnInit {
   });
 
   constructor(private userService: UserService,private router: Router,
-    private formBuilder: FormBuilder, private jwtService : JwtHelperService, private toastr: ToastrService) { }
+    private formBuilder: FormBuilder, private auth:AuthService,  private toastr: ToastrService,
+    private snackBar:MatSnackBar) { }
   file:File;
   ngOnInit(): void {
-    let token = localStorage.getItem('token');
-    let decoed = this.jwtService.decodeToken(token?token:"");
-    console.log(decoed[environment.userRoleKey]);
-    this.userService.getUserData(decoed.id).subscribe(
+    this.userService.getUserData(this.auth.getUserId()).subscribe(
       (data:UserData) =>{
         console.log(data);
         this.changeForm.get('id')?.setValue(data.id.toString());
@@ -60,6 +60,7 @@ export class ChangeComponent implements OnInit {
         if(error.status == 401){
           this.router.navigateByUrl('/user/login')
         }
+        this.snackBar.open(error.error, "", { duration: 2000,} );
       }
     );
   }
@@ -79,7 +80,12 @@ export class ChangeComponent implements OnInit {
 
   onFileSelected(event:any){
     this.file = event.target.files[0];
-    console.log(event);
+    let reader = new FileReader();
+    reader.onloadend = (e) => {
+      console.log(reader.result);
+      this.slika = reader.result as string;
+    }
+    reader.readAsDataURL(this.file);
   }
   
   onSubmit(){
@@ -100,7 +106,7 @@ export class ChangeComponent implements OnInit {
         this.ngOnInit();
       },
       error =>{
-        this.toastr.error(error.error);
+        this.snackBar.open(error.error, "", { duration: 2000,} );
       }
     );
 

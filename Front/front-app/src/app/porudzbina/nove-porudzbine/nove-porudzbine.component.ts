@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ToastrService } from 'ngx-toastr';
@@ -16,7 +17,7 @@ import { PorudzbinaService } from 'src/app/shared/services/porudzbina.service';
 export class NovePorudzbineComponent implements OnInit {
 
   constructor(private service: PorudzbinaService, 
-    private toastr: ToastrService, private router:Router, private auth:AuthService) { }
+    private snackBar: MatSnackBar, private router:Router, private auth:AuthService) { }
 
   novePorudzbine:Porudzbina[];
   cols=['id', 'user', 'adresa', 'ukCena', 'komentar', 'dugme'];
@@ -25,10 +26,12 @@ export class NovePorudzbineComponent implements OnInit {
     this.service.getNovePorudzbine().subscribe(
       (data:Porudzbina[]) => {
         this.novePorudzbine = data;
-        console.log(data);
       },
       error => {
-        console.log(error);
+        if(error.status == 401){
+          this.router.navigateByUrl('/user/login')
+        }
+        this.snackBar.open(error.error, "", { duration: 2000,} );
       }
     )
   }
@@ -45,7 +48,10 @@ export class NovePorudzbineComponent implements OnInit {
         this.router.navigateByUrl('porudzbina/trenutna');
       },
       error => {
-        this.toastr.error(error.error);
+        if(error.status == 401){
+          this.router.navigateByUrl('/user/login')
+        }
+       this.snackBar.open(error.error, "", { duration: 2000,} ); 
       }
     )
   }

@@ -1,6 +1,7 @@
 import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ToastrService } from 'ngx-toastr';
@@ -22,12 +23,12 @@ export class TrenutnaPorudzbinaComponent implements OnInit {
   cols=['naziv', 'cena','kolicina']
   dostavljac=false;
   intervalId:any;
-  trajanjeSekunde:number;
+  trajanjeSekunde:number = 0;
   minuti:number;
   sekunde:number;
 
   constructor(private service: PorudzbinaService,private auth:AuthService ,
-    private toastr:ToastrService, private router:Router ) { }
+    private snackBar:MatSnackBar, private router:Router ) { }
   ngOnInit(): void {
    
     this.dostavljac = this.auth.isUserDostavljac();
@@ -43,12 +44,14 @@ export class TrenutnaPorudzbinaComponent implements OnInit {
               this.cekajuDostavu.push(por);
           }
         }
+    },
+    error =>{
+      if(error.status == 401){
+          this.router.navigateByUrl('/user/login')
+        }
+        this.snackBar.open(error.error, "", { duration: 2000,} );
     });
 
-  }
-
-  showNovaPorudzbina(){
-    this.router.navigateByUrl('porudzbina/create');
   }
 
   setTimer(trajanjeDostave:any, vremePrihvata:any){
@@ -65,6 +68,10 @@ export class TrenutnaPorudzbinaComponent implements OnInit {
           this.router.navigateByUrl("porudzbina/zavrsene")
         },
         error => {
+          if(error.status == 401){
+          this.router.navigateByUrl('/user/login')
+        }
+          this.snackBar.open(error.error, "", { duration: 2000,} );
           this.router.navigateByUrl("porudzbina/zavrsene")
         }
       )
@@ -84,6 +91,10 @@ export class TrenutnaPorudzbinaComponent implements OnInit {
               this.router.navigateByUrl("porudzbina/zavrsene")
             },
             error => {
+              if(error.status == 401){
+          this.router.navigateByUrl('/user/login')
+        }
+        this.snackBar.open(error.error, "", { duration: 2000,} );
               this.router.navigateByUrl("porudzbina/zavrsene")
             }
           );

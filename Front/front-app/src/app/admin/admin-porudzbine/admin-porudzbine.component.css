@@ -1,5 +1,7 @@
 table {
     width: 100%;
+    background-color: #d9f3e4;
+    font-weight: 500;
 }
 
 .primary{
@@ -10,4 +12,10 @@ table {
 }
 .warn{
     background-color: red;
+}
+
+div{
+    margin: 10px;
+    margin-left:25px;
+    margin-right: 25px;
 }

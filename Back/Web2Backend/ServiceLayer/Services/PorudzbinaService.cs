@@ -135,7 +135,7 @@ namespace ServiceLayer.Services
             }
 
             bool userExists = _userRepo.DoesUserExist(porudzbina.NarucilacId);
-
+            ukCena += porudzbina.CenaDostave;
             if(!(porudzbina.Cena == ukCena && porudzbina.Proizvodi.Count != 0) ||
                 porudzbina.Adresa.Equals(string.Empty) ||
                 !userExists)

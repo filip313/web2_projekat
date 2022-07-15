@@ -1,6 +1,7 @@
 import { validateHorizontalPosition } from '@angular/cdk/overlay';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTable } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -9,6 +10,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { NovaPorudzbina } from 'src/app/shared/models/novaporudzbina.model';
 import { Porudzbina } from 'src/app/shared/models/porudzbina.model';
 import { PorudzbinaProizvod } from 'src/app/shared/models/porudzbinaproizvod.model';
+import { environment } from 'src/environments/environment';
 import { PorudzbinaService } from '../../shared/services/porudzbina.service';
 
 @Component({
@@ -20,12 +22,13 @@ export class NapraviPorudzbinuComponent implements OnInit {
 
   constructor(private service: PorudzbinaService, 
     private toastr:ToastrService, private formBuilder: FormBuilder, private router: Router,
-    private auth:AuthService) { }
+    private auth:AuthService, private snackBar:MatSnackBar) { }
   
   korpa:PorudzbinaProizvod[] = [];
   cols = ['naziv','kol', 'cena','ukloni'];
   @ViewChild(MatTable) table : MatTable<PorudzbinaProizvod>;
   forma:FormGroup;
+  dostava:number;
 
   ngOnInit(): void {
     this.forma = this.formBuilder.group({
@@ -39,6 +42,7 @@ export class NapraviPorudzbinuComponent implements OnInit {
     },{
       validators:[]
     });
+    this.dostava = environment.cenaDostave;
   }
 
   dodajUKorpu(value:PorudzbinaProizvod){
@@ -73,13 +77,14 @@ export class NapraviPorudzbinuComponent implements OnInit {
   
   onSubmit(){
     if(this.korpa.length <= 0){
-      this.toastr.error('Korpa ne moze biti prazna!');
+      this.snackBar.open('Korpa ne moze biti prazna!');
       return;
     }
     let data = new NovaPorudzbina();
     data.adresa = this.forma.controls['adresa'].value;
     data.komentar = this.forma.controls['komentar'].value;
-    data.cena = this.ukupnaCena();
+    data.cena = this.ukupnaCena() + this.dostava;
+    data.cenaDostave = this.dostava;
     data.proizvodi = this.korpa;
     data.narucilacId = this.auth.getUserId();
     this.service.napraviPorudzbinu(data).subscribe(
@@ -88,7 +93,10 @@ export class NapraviPorudzbinuComponent implements OnInit {
         this.router.navigateByUrl('porudzbina/trenutna')
       },
       error =>{
-        console.log(error);
+        if(error.status == 401){
+          this.router.navigateByUrl('/user/login')
+        }
+        this.snackBar.open(error.error, "", { duration: 2000,} );
       }
     );
   }

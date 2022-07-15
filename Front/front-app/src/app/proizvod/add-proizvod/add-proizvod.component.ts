@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { Proizvod } from 'src/app/shared/models/proizovd.model';
 import { ProizvodService } from 'src/app/shared/services/proizvod.service';
 
@@ -12,7 +14,8 @@ import { ProizvodService } from 'src/app/shared/services/proizvod.service';
 export class AddProizvodComponent implements OnInit {
   form:FormGroup;
   constructor(private servis:ProizvodService, private formBuilder:FormBuilder,
-    private dialogRef:MatDialogRef<AddProizvodComponent>) { }
+    private dialogRef:MatDialogRef<AddProizvodComponent>, private router:Router,
+    private snackBar:MatSnackBar) { }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -38,6 +41,12 @@ export class AddProizvodComponent implements OnInit {
     this.servis.dodajProizovd(data).subscribe(
       (data:Proizvod) => {
         this.dialogRef.close();
+      },
+      error =>{
+        if(error.status == 401){
+          this.router.navigateByUrl('/user/login')
+        }
+        this.snackBar.open(error.error, "", { duration: 2000,} );
       }
     )
   }

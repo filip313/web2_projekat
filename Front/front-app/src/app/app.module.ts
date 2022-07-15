@@ -26,6 +26,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import{ MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { ToastrModule } from 'ngx-toastr';
 import { ChangeComponent } from './user/change/change.component';
@@ -95,6 +96,7 @@ export function tokenGetter(){
     MatGridListModule,
     MatSidenavModule,
     MatToolbarModule,
+    MatSnackBarModule,
     ToastrModule.forRoot({
       progressBar : true
     }),

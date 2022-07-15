@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -17,7 +19,7 @@ export class UserPorudzbineComponent implements OnInit {
   potrosac:boolean = false;
   cols = ['id', 'user', 'adresa', 'ukCena', 'prihvat', 'trajanje']
   constructor(private servis: PorudzbinaService, private auth:AuthService,
-    private toastr : ToastrService) { }
+    private snackBar: MatSnackBar, private router:Router) { }
 
   ngOnInit(): void {
     this.potrosac = this.auth.isUserPotrosac();
@@ -33,7 +35,10 @@ export class UserPorudzbineComponent implements OnInit {
         this.porudzbine = temp;
       },
       error => {
-          this.toastr.error(error.error);
+        if(error.status == 401){
+          this.router.navigateByUrl('/user/login')
+        }
+         this.snackBar.open(error.error, "", { duration: 2000,} ); 
       });
   }
 }

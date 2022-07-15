@@ -13,6 +13,7 @@ namespace DataLayer.Models
         public string Adresa { get; set; }
         public string Komentar { get; set; }
         public decimal Cena { get; set; }
+        public decimal CenaDostave{ get; set; }
         public TimeSpan TrajanjeDostave { get; set; }
         public DateTime VremePrihvata{ get; set; }
         public StatusPorudzbine Status { get; set; }

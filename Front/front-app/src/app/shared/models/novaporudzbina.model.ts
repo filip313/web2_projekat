@@ -5,6 +5,7 @@ export class NovaPorudzbina{
         adresa:string = "";
         komentar:string = "";
         cena:number;
+        cenaDostave:number;
         proizvodi:PorudzbinaProizvod[];
         narucilacId:number;
 }

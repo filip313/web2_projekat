@@ -2,3 +2,11 @@
     margin:10px;
     width: 100%;
 }
+
+button{
+    text-align: center;
+}
+
+.panel{
+    background-color: #d9f3e4;;
+}

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Porudzbina } from 'src/app/shared/models/porudzbina.model';
 import { PorudzbinaService } from 'src/app/shared/services/porudzbina.service';
@@ -18,7 +20,8 @@ export class AdminPorudzbineComponent implements OnInit {
   };
 
   cols = ['id', 'narucilac', 'dostavljac', 'status'];
-  constructor(private servis:PorudzbinaService, private toastr:ToastrService) { }
+  constructor(private servis:PorudzbinaService, private snackBar:MatSnackBar,
+    private router:Router) { }
 
   ngOnInit(): void {
     this.servis.getPorudzbine().subscribe(
@@ -31,7 +34,10 @@ export class AdminPorudzbineComponent implements OnInit {
         this.porudzbine = data;
       },
       error => {
-        this.toastr.error(error.error);
+        if(error.status == 401){
+          this.router.navigateByUrl('user/login');
+        }
+       this.snackBar.open(error.error, "", { duration: 2000,} ); 
       }
     )
   }

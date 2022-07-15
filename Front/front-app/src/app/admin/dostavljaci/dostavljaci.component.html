@@ -1,3 +1,4 @@
+<div>
 <table mat-table [dataSource]="dostavljaci" class="mat-elevation-z8">
     <ng-container matColumnDef="username">
         <th mat-header-cell *matHeaderCellDef>Username</th>
@@ -38,3 +39,4 @@
     <tr mat-header-row *matHeaderRowDef="cols"></tr>
     <tr mat-row *matRowDef="let row; columns: cols;"></tr>
 </table>
+</div>

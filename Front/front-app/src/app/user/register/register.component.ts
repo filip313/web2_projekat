@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Register } from 'src/app/shared/models/register.model';
 import { UserService } from 'src/app/shared/services/user.service';
 import { CustomValidacijaRodjenja } from 'src/app/shared/validators/datum.validator';
@@ -14,7 +15,9 @@ export class RegisterComponent implements OnInit {
 
   registerForm: FormGroup;
   file:File;
-  constructor(private service: UserService, private formBuilder:FormBuilder) { }
+  slika:string;
+  constructor(private service: UserService, private formBuilder:FormBuilder,
+    private snackBar:MatSnackBar) { }
   
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
@@ -62,6 +65,12 @@ export class RegisterComponent implements OnInit {
   onFileSelected(event:any){
     this.registerForm.controls['file'] = event.target.files;
     this.file = event.target.files[0];
+    let reader = new FileReader();
+    reader.onloadend = (e) => {
+      console.log(reader.result);
+      this.slika = reader.result as string;
+    }
+    reader.readAsDataURL(this.file);
   }
 
   onSubmit(){
@@ -80,6 +89,9 @@ export class RegisterComponent implements OnInit {
     this.service.register(registerData).subscribe(
     (data:Register) =>{
       console.log(data);
+    },
+    error =>{
+      this.snackBar.open(error.error, "", { duration: 2000,} );
     }
     );
   }

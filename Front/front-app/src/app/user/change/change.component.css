@@ -1,0 +1,25 @@
+.mat-form-field{
+    margin:5px;
+    width: 100%;
+}
+div{
+    margin-top:0px;
+    display: flex;
+justify-content: center;
+align-items: center;
+}
+
+form{
+    width:100%;
+}
+
+button{
+    text-align: center;
+}
+.mat-card{
+    width: 20%;
+    background-color: #d9f3e4;
+}
+input{
+    font-weight:500;
+}

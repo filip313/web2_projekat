@@ -7,6 +7,7 @@ export class Porudzbina{
         adresa:string = "";
         komentar:string = "";
         cena:number;
+        cenaDostave:number;
         trajanjeDostave:any;
         vremePrihvata:Date;
         status:string="";

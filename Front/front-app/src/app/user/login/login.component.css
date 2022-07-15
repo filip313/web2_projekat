@@ -8,3 +8,19 @@ align-items: center;
 .mat-form-field{
     width: 100%;
 }
+
+form{
+    width:100%
+}
+
+.mat-card{
+    width: 20%;
+    background-color: #d9f3e4;
+}
+button{
+    text-align: center;
+}
+
+input{
+    font-weight: 500;
+}

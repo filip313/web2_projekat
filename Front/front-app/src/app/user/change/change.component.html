@@ -1,3 +1,4 @@
+<div><mat-card><mat-card-content>
 <form [formGroup]="changeForm" autocomplete="off">
     <mat-form-field>
         <input matInput placeholder="Username" formControlName="username">
@@ -60,9 +61,11 @@
     </mat-form-field>
     <br>
 
-    <button type="button" mat-raised-button (click)="fileInput.click()">Izaberi sliku</button>
-    <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file">
-    <img width="100" height="100" [src]='slika'/>
+    <div><img width="150" height="150" [src]='slika'/></div>
     <br>
-    <button mat-raised-button color="primary"[disabled]="changeForm.invalid" (click)="onSubmit()">Promeni podatke!</button>
+    <button type="button" mat-raised-button (click)="fileInput.click()" class="mat-form-field">Izaberi sliku</button>
+    <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file">
+    <br>
+    <button mat-raised-button color="primary"[disabled]="changeForm.invalid" (click)="onSubmit()" class="mat-form-field">Promeni podatke!</button>
 </form>
+</mat-card-content></mat-card></div>
