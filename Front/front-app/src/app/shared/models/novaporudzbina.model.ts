@@ -8,4 +8,7 @@ export class NovaPorudzbina{
         cenaDostave:number;
         proizvodi:PorudzbinaProizvod[];
         narucilacId:number;
+        nacinPlacanja:string;
+        payPalStatus:string;
+        payPalId:string;
 }

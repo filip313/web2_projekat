@@ -8,7 +8,7 @@ export const environment = {
   allowdDomains:['localhost:44397'],
   imageDisplayPrefix : "data:image/jpeg;base64,", 
   userRoleKey: "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
-  cenaDostave: 300
+  cenaDostave: 300,
 };
 
 /*

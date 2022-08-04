@@ -43,7 +43,7 @@
                     <tr mat-row *matRowDef="let row; columns:cols"></tr>
                     <tr mat-footer-row *matFooterRowDef="cols"></tr>
                 </table>
-</div>
+            </div>
                 <br>
             <mat-divider></mat-divider>
             <form [formGroup]="forma" mb-4 autocomplete="off">
@@ -55,9 +55,23 @@
                     <textarea matInput placeholder="Komentar" formControlName="komentar"></textarea>
                 </mat-form-field>
                 <br>
-           </form>
-        <button mat-raised-button [disabled]="forma.invalid" color="primary" class="mat-form-field"
+                <mat-form-field>
+                    <mat-label>Nacin placanja</mat-label>
+                    <mat-select [(value)]="selected">
+                        <mat-option *ngFor="let nacin of nacini" [value]="nacin">
+                            {{ nacin }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </form>
+            <button mat-raised-button [disabled]="forma.invalid || selected != 'Pouzecem'" color="primary" class="mat-form-field"
                     (click)="onSubmit()">Poruci</button>
-         </mat-card-content></mat-card>
-</span>
+            <br>
+            <br>
+            <mat-divider></mat-divider>
+            <br>
+            <div id="paypalButton" [hidden]="(selected != 'PayPal' || forma.invalid)" style="padding:10px 0px 10px 0px;"></div>
+        </mat-card-content></mat-card>
+        <br>
+    </span>
 </div>
