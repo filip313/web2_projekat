@@ -112,5 +112,21 @@ namespace API.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("porudzbina_test")]
+        [Authorize(Roles ="Potrosac")]
+        public IActionResult TestirajPorudzbinu([FromBody] NovaPorudzbinaDto testPorudzbina)
+        {
+            try
+            {
+                return Ok(_porudzbinaService.Test(testPorudzbina));
+            }
+            catch(Exception e)
+            {
+                return StatusCode(406);
+            }
+        }
+
+
     }
 }

@@ -114,6 +114,26 @@ namespace ServiceLayer.Services
             return _mapper.Map<PorudzbinaDto>(porudzbina);
         }
 
+        public bool Test(NovaPorudzbinaDto testPorudzbina)
+        {
+            if (IsPorudzbinaValid(testPorudzbina))
+            {
+                var porudzbine = _porudzbinaRepo.GetUserPorudzbine(testPorudzbina.NarucilacId);
+
+                foreach (var item in porudzbine)
+                {
+                    if (item.Status == StatusPorudzbine.DostavljaSe || item.Status == StatusPorudzbine.CekaDostavu)
+                    {
+                        throw new Exception();
+                    }
+                }
+
+                return true;
+            }
+
+            throw new Exception();
+        }
+
         public PorudzbinaDto ZavrsiPorudzbinu(int id)
         {
             var porudzbina = _porudzbinaRepo.GetPorudzbinaById(id);

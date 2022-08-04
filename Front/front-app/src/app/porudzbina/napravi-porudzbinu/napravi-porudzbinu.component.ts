@@ -36,6 +36,8 @@ export class NapraviPorudzbinuComponent implements OnInit {
   payapl:object;
   nacini = ['Pouzecem', 'PayPal']
   selected = "";
+  orderId:number = 0;
+  
 
   ngOnInit(): void {
     this.forma = this.formBuilder.group({
@@ -50,7 +52,7 @@ export class NapraviPorudzbinuComponent implements OnInit {
       validators:[]
     });
     this.dostava = environment.cenaDostave;
-    loadScript({ 'client-id':'AYdJNmq5wy6-6kdLrXv7NqqTA8E_eGtKvlIc_t5rsTTwDEPBQnRPCmec7Z_63JGOshUaUKFEPh0opgoV', 'currency':'USD', 'enable-funding':'card'})
+    loadScript({ 'client-id':'AYdJNmq5wy6-6kdLrXv7NqqTA8E_eGtKvlIc_t5rsTTwDEPBQnRPCmec7Z_63JGOshUaUKFEPh0opgoV', 'currency':'USD', 'enable-funding':'card', 'locale':'en_RS'})
       .then(
         (paypal:any) => {
           paypal.Buttons({
@@ -59,25 +61,48 @@ export class NapraviPorudzbinuComponent implements OnInit {
               color: 'blue',
               layout: 'horizontal',
               label: 'paypal',
+              tagline: false
             },
             createOrder:(data:any, actions:any) =>{
               if(this.korpa.length <= 0){
                 this.snackBar.open("Korpa ne moze biti prazna!", "", { duration: 2000,});
                 return  new Error();
               }
-              return actions.order.create({
-                
-                purchase_units: [{
-                  amount:{ value: this.ukupnaCena() + environment.cenaDostave}
-                }]
-              }).catch((error:any) =>{ this.snackBar.open("Korpa ne moze biti prazna!", "", { duration: 2000,} );});
-            },
+                this.service.testPorudzbinu(this.fillTestOrder()).subscribe(
+                  (data) => {
+                    console.log(actions);
+                    return actions.order.create({
+                      purchase_units: [{
+                        amount:{ value: this.ukupnaCena() + environment.cenaDostave},
+                        shipping:{address:{country_code:"RS", address_line_1:this.forma.controls['adresa'].value, postal_code:"21000", admin_area_1:"Serbia", admin_area_2:"Novi Sad"}}
+                      }],
+                      application_context:{
+                        brand_name:"Kafana Slozna Braca",
+                        payment_method:{
+                          payee_preferred:"IMMEDIATE_PAYMENT_REQUIRED",
+                          standard_entry_class_code: "WEB"
+                        },
+                        shipping_preference:"SET_PROVIDED_ADDRESS",
+                        user_action:"PAY_NOW"
+                      },
+                    }).catch((error:any) =>{ this.snackBar.open("Korpa ne moze biti prazna!", "", { duration: 2000,} );});
+                  },
+                  (error) => {
+                    return new Error();
+                  }
+            )},
             onApprove: (data:any, actions:any) =>{
+
+                console.log('ACTIONS: ',actions);
+                console.log('DATA: ',data);
               return actions.order.capture().then((orderData:any) => {
+                console.log('ORDER DATA: ', orderData);
                 console.log('Capture result ', orderData.purchase_units[0].payments.captures[0]);
                 const transaction = orderData.purchase_units[0].payments.captures[0];
-                this.napraviPorudzbinu(transaction.id, transaction.status);
-                alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for details`)
+                if(transaction.status == "COMPLETED"){
+                  this.napraviPorudzbinu(transaction.id, transaction.status);
+                }
+                //alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for details`)
               }
               )}
           }).render("#paypalButton")
@@ -150,14 +175,27 @@ export class NapraviPorudzbinuComponent implements OnInit {
       (data:NovaPorudzbina) => {
         console.log(data);
         this.router.navigateByUrl('porudzbina/trenutna')
+        this.orderId = data.id;
       },
       error =>{
         if(error.status == 401){
           this.router.navigateByUrl('/user/login')
         }
+        this.orderId = -1;
         this.snackBar.open(error.error, "", { duration: 2000,} );
       }
     );
+  }
+
+  fillTestOrder():NovaPorudzbina{
+    let data = new NovaPorudzbina();
+    data.adresa = this.forma.controls['adresa'].value;
+    data.komentar = this.forma.controls['komentar'].value;
+    data.cena = this.ukupnaCena() + this.dostava;
+    data.cenaDostave = this.dostava;
+    data.proizvodi = this.korpa;
+    data.narucilacId = this.auth.getUserId();
+    return data;
   }
   
 }

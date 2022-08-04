@@ -31,4 +31,8 @@ export class PorudzbinaService {
   zavrsiPorudzbinu(porudzbinaId:number):Observable<Porudzbina>{
     return this.http.post<Porudzbina>(environment.serverURL + 'api/Porudzbina/zavrsi', porudzbinaId);
   }
+
+  testPorudzbinu(data:NovaPorudzbina):Observable<object>{
+    return this.http.post<object>(environment.serverURL + 'api/Porudzbina/porudzbina_test', data);
+  }
 }
