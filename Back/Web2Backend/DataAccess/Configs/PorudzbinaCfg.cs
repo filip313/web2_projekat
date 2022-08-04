@@ -25,6 +25,8 @@ namespace DataLayer.Configs
 
             builder.HasOne(x => x.Dostavljac).WithMany(x => x.Dostave).HasForeignKey(x => x.DostavljacId).OnDelete(DeleteBehavior.NoAction);
             builder.HasOne(x => x.Narucialc).WithMany(x => x.Porudzbine).HasForeignKey(x => x.NarucilacId).OnDelete(DeleteBehavior.NoAction);
+
+            builder.Property(x => x.NacinPlacanja).HasConversion(typeof(string));
         }
     }
 }

@@ -20,4 +20,10 @@ namespace DataLayer.Models
         Potrosac,
         Dostavljac
     }
+
+    public enum NacinPlacanja
+    {
+        Pouzecem,
+        PayPal
+    }
 }

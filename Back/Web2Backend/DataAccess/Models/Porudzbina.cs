@@ -22,5 +22,8 @@ namespace DataLayer.Models
         public User Narucialc { get; set; }
         public int DostavljacId { get; set; }
         public User Dostavljac { get; set; }
+        public string PayPalId { get; set; }
+        public string PayPalStatus { get; set; }
+        public NacinPlacanja NacinPlacanja { get; set; }
     }
 }
