@@ -1,0 +1,47 @@
+
+table{
+    width:100%;
+    background-color: #d9f3e4;
+    font-weight: 500;
+}
+
+
+.mat-form-field{
+    width:80%;
+    margin-left:60px;
+}
+.mat-drawer{
+    width:30%;
+
+}
+.mat-drawer-container{
+    height: 100%;
+}
+
+.container{
+background-color: #d9f3e4;
+}
+.levo{
+    width: 55%;
+    float:left;
+    margin-top:20px;
+
+}
+
+.desno{
+    width: 39%;
+    float:left;
+    margin-left:30px;
+    margin-top:20px;
+}
+
+form{
+    font-weight: 500;
+}
+button{
+    text-align: center;
+}
+
+div {
+    width: 100%;
+}

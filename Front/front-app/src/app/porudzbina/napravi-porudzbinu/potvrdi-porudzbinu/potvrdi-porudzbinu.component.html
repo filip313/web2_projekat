@@ -1,0 +1,47 @@
+<table mat-table [dataSource]="data.proizvodi" class="demo-table">
+    <ng-container matColumnDef="naziv">
+        <th mat-header-cell *matHeaderCellDef>Naziv</th>
+        <td mat-cell *matCellDef="let item">{{ item.proizvod.naziv }} </td>
+        <td mat-footer-cell *matFooterCellDef>Ukupno:</td>
+    </ng-container>
+
+    <ng-container matColumnDef="kol">
+        <th mat-header-cell *matHeaderCellDef>Kolicina</th>
+        <td mat-cell *matCellDef="let item">{{ item.kolicina }}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <ng-container matColumnDef="cena">
+        <th mat-header-cell *matHeaderCellDef>Cena</th>
+        <td mat-cell *matCellDef="let item">{{ item.proizvod.cena * item.kolicina }}</td>
+        <td mat-cell *matFooterCellDef> {{ data.cena | currency:'RSD' }} ({{ data.cenaDostave }} dostava)</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="cols"></tr>
+    <tr mat-row *matRowDef="let row; columns:cols"></tr>
+    <tr mat-footer-row *matFooterRowDef="cols"></tr>
+</table>
+<div>
+
+     <br>
+            <mat-divider></mat-divider>
+            <form mb-4 autocomplete="off">
+                <mat-form-field>
+                    <input matInput placeholder="Adresa" formControlName="adresa" [value]="data.adresa" [disabled]='true'>
+                </mat-form-field>
+                <br>
+                <mat-form-field>
+                    <textarea matInput placeholder="Komentar" formControlName="komentar" [value]="data.komentar" [disabled]="true"></textarea>
+                </mat-form-field>
+                <br>
+                <mat-form-field>
+                    <mat-label>Nacin placanja</mat-label>
+                    <input matInput [value]="data.nacinPlacanja" [disabled]="true"/> 
+                </mat-form-field>
+            </form>
+    <br>
+    <div id="paypalButton"></div>
+    <div *ngIf="data.nacinPlacanja == 'Pouzecem'">
+        <button mat-raised-button color="primary" (click)="napraviPorudzbinu()">Zavrsi narudzbinu</button>
+    </div>
+    </div>
