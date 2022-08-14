@@ -52,6 +52,7 @@ import { AuthService } from './auth/auth.service';
 import { NavbarComponent } from './navbar/navbar.component';
 
 import { OAuthModule } from 'angular-oauth2-oidc';
+import { PotvrdiPorudzbinuComponent } from './porudzbina/napravi-porudzbinu/potvrdi-porudzbinu/potvrdi-porudzbinu.component';
 
 @NgModule({
   declarations: [
@@ -72,6 +73,7 @@ import { OAuthModule } from 'angular-oauth2-oidc';
     KorpaItemComponent,
     NovePorudzbineComponent,
     NavbarComponent,
+    PotvrdiPorudzbinuComponent,
   ],
   imports: [
     BrowserModule,

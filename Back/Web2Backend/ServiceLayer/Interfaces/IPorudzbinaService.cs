@@ -16,6 +16,6 @@ namespace ServiceLayer.Interfaces
         PorudzbinaDto Prihvati(PrihvatiPorudzbinuDto prihvatDto);
         List<PorudzbinaDto> GetNove();
         PorudzbinaDto ZavrsiPorudzbinu(int id);
-        bool Test(NovaPorudzbinaDto testPorudzbina);
+        NovaPorudzbinaDto Test(NovaPorudzbinaDto testPorudzbina);
     }
 }

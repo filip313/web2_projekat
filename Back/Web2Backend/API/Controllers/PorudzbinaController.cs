@@ -123,7 +123,7 @@ namespace API.Controllers
             }
             catch(Exception e)
             {
-                return StatusCode(406);
+                return StatusCode(406, e.Message);
             }
         }
 

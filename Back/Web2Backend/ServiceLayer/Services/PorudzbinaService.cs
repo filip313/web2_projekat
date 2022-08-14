@@ -114,7 +114,7 @@ namespace ServiceLayer.Services
             return _mapper.Map<PorudzbinaDto>(porudzbina);
         }
 
-        public bool Test(NovaPorudzbinaDto testPorudzbina)
+        public NovaPorudzbinaDto Test(NovaPorudzbinaDto testPorudzbina)
         {
             if (IsPorudzbinaValid(testPorudzbina))
             {
@@ -124,14 +124,14 @@ namespace ServiceLayer.Services
                 {
                     if (item.Status == StatusPorudzbine.DostavljaSe || item.Status == StatusPorudzbine.CekaDostavu)
                     {
-                        throw new Exception();
+                        throw new Exception("Nije moguce napraviti novu porudzbinu dok se trenutna ne zavrsi!");
                     }
                 }
 
-                return true;
+                return testPorudzbina;
             }
 
-            throw new Exception();
+            throw new Exception("Los Zahtev!");
         }
 
         public PorudzbinaDto ZavrsiPorudzbinu(int id)
