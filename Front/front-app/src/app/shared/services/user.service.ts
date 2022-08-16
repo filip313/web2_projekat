@@ -35,4 +35,8 @@ export class UserService {
   verifikujDostavljaca(data:Verifkacija):Observable<UserData>{
     return this.http.post<UserData>(environment.serverURL + 'api/User/verifikuj', data);
   }
+
+  socialLogin(data:any):Observable<Token>{
+    return this.http.post<Token>(environment.serverURL + 'api/User/socialLogin', data);
+  }
 }

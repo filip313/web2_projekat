@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,28 +32,28 @@ namespace ServiceLayer.Services
             _emailSender = sender;
         }
 
-        public TokenDto Login (UserLoginDto user)
+        public TokenDto Login(UserLoginDto user)
         {
             User dbUser = _userRepo.GetUserByUsername(user.Username);
 
-            if(null == dbUser)
+            if (null == dbUser)
             {
                 throw new Exception("Korisnik sa ovim korisnickim imenom ne postoji!");
             }
 
-            if(BCrypt.Net.BCrypt.Verify(user.Password, dbUser.Password))
+            if (BCrypt.Net.BCrypt.Verify(user.Password, dbUser.Password))
             {
                 List<Claim> claims = new List<Claim>();
 
-                if(dbUser.UserType == UserType.Admin)
+                if (dbUser.UserType == UserType.Admin)
                 {
                     claims.Add(new Claim(ClaimTypes.Role, UserType.Admin.ToString()));
                 }
-                else if(dbUser.UserType == UserType.Dostavljac)
+                else if (dbUser.UserType == UserType.Dostavljac)
                 {
                     claims.Add(new Claim(ClaimTypes.Role, UserType.Dostavljac.ToString()));
                 }
-                else if(dbUser.UserType == UserType.Potrosac)
+                else if (dbUser.UserType == UserType.Potrosac)
                 {
                     claims.Add(new Claim(ClaimTypes.Role, UserType.Potrosac.ToString()));
                 }
@@ -85,17 +86,17 @@ namespace ServiceLayer.Services
                 newUser.Password = BCrypt.Net.BCrypt.HashPassword(newUser.Password);
                 var user = (User)_mapper.Map(newUser, typeof(UserRegistrationDto), typeof(User));
 
-                if(user.UserType == UserType.Admin)
+                if (user.UserType == UserType.Admin)
                 {
                     //throw new Exception("Los zahtev!");
                 }
-                else if(_userRepo.GetUserByUsername(user.Username) != null)
+                else if (_userRepo.GetUserByUsername(user.Username) != null)
                 {
                     throw new Exception("Korisnik sa tim korisnickim imenom vec postoji!");
                 }
 
                 string putanja = "";
-                if(newUser.File != null && newUser.File.Length > 0)
+                if (newUser.File != null && newUser.File.Length > 0)
                 {
                     putanja = _userRepo.SaveImage(newUser.File, newUser.Username);
                 }
@@ -115,8 +116,8 @@ namespace ServiceLayer.Services
         {
             bool ret = true;
 
-            if(user.Username.Equals(string.Empty) 
-                || user.Password.Equals(string.Empty) 
+            if (user.Username.Equals(string.Empty)
+                || user.Password.Equals(string.Empty)
                 || !IsValidEmail(user.Email)
                 || user.Ime.Equals(string.Empty)
                 || user.Prezime.Equals(string.Empty)
@@ -152,7 +153,7 @@ namespace ServiceLayer.Services
         public UserDto GetUser(int id)
         {
             var dbUser = _userRepo.GetUserById(id);
-            if(!dbUser.Slika.Equals(string.Empty))
+            if (!dbUser.Slika.Equals(string.Empty))
             {
                 byte[] imageByte = File.ReadAllBytes(dbUser.Slika);
                 dbUser.Slika = Convert.ToBase64String(imageByte);
@@ -172,11 +173,11 @@ namespace ServiceLayer.Services
         {
             var dostavljac = _userRepo.GetUserById(info.DostavljacId);
 
-            if(dostavljac == null)
+            if (dostavljac == null)
             {
                 throw new Exception("Trazeni dostavljac ne postoji!");
             }
-            else if(dostavljac.Verifikovan == info.Verifikacija || dostavljac.UserType != UserType.Dostavljac)
+            else if (dostavljac.Verifikovan == info.Verifikacija || dostavljac.UserType != UserType.Dostavljac)
             {
                 throw new Exception("Nije moguce izmeniti ovu verifikaciju!");
             }
@@ -209,17 +210,17 @@ namespace ServiceLayer.Services
                     dbUser.Password = BCrypt.Net.BCrypt.HashPassword(izmena.NoviPassword);
                 }
 
-                if(izmena.Ime != null)
+                if (izmena.Ime != null)
                     dbUser.Ime = izmena.Ime.Equals(string.Empty) ? dbUser.Ime : izmena.Ime;
-                if(izmena.Prezime != null)
+                if (izmena.Prezime != null)
                     dbUser.Prezime = izmena.Prezime.Equals(string.Empty) || izmena.Prezime == null ? dbUser.Prezime : izmena.Prezime;
-                if(izmena.Email != null)
+                if (izmena.Email != null)
                     dbUser.Email = (izmena.Ime.Equals(string.Empty) && IsValidEmail(izmena.Email)) ? dbUser.Email : izmena.Email;
                 if (izmena.DatumRodjenja != null)
                 {
                     dbUser.DatumRodjenja = (DateTime)izmena.DatumRodjenja;
                 }
-                if(izmena.Adresa != null)
+                if (izmena.Adresa != null)
                     dbUser.Adresa = izmena.Adresa.Equals(string.Empty) || izmena.Adresa == null ? dbUser.Adresa : izmena.Adresa;
                 if (izmena.File != null)
                 {
@@ -232,11 +233,72 @@ namespace ServiceLayer.Services
                     byte[] imageByte = File.ReadAllBytes(dbUser.Slika);
                     dbUser.Slika = Convert.ToBase64String(imageByte);
                 }
-                
+
                 return _mapper.Map<UserDto>(dbUser);
             }
 
             throw new Exception("Greska prilikom autentifikacije!");
         }
+
+        public TokenDto SocialLogin(SocialLoginDto data)
+        {
+            if (PotvrdiToken(data.IdToken))
+            {
+                var dbUser = _userRepo.GetUserByEmail(data.Email);
+
+                if(dbUser == null)
+                {
+                    dbUser = _userRepo.AddUser(new User() { Email = data.Email, Adresa = "", DatumRodjenja = DateTime.Now,
+                            Ime = data.FirstName, Slika = "", Password = "", Prezime = data.LastName, Username=data.Email, UserType = UserType.Potrosac
+                    });
+                }
+
+               List<Claim> claims = new List<Claim>();
+
+
+               claims.Add(new Claim(ClaimTypes.Role, UserType.Potrosac.ToString()));
+               claims.Add(new Claim("id", dbUser.Id.ToString()));
+
+                SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey.Value));
+                var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                var tokenOptions = new JwtSecurityToken(
+                    issuer: "https://localhost:5002",
+                    claims: claims,
+                    expires: DateTime.Now.AddMinutes(20),
+                    signingCredentials: signingCredentials);
+
+                string token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+                return new TokenDto() { Token = token};
+            }
+
+            throw new Exception();
+
+        }
+
+        private bool PotvrdiToken(string token)
+        {
+            var httpClient = new HttpClient();
+            var requestUri = new Uri(string.Format("https://www.googleapis.com/oauth2/v3/tokeninfo?id_token={0}", token));
+
+            HttpResponseMessage response;
+            try
+            {
+                response = httpClient.GetAsync(requestUri).Result;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                return false;
+            }
+
+            var content = response.Content.ReadAsStringAsync().Result;
+
+            return true;
+        }
     }
+
 }

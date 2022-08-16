@@ -10,7 +10,12 @@
     <input matInput type="password" placeholder="password" formControlName="password">
   </mat-form-field>
   <br>
+  <div>
   <button mat-raised-button [disabled]="loginForm.invalid" color="primary" (click)="onSubmit()" class="mat-form-field">Uloguj se!</button>
+  <br>
+  <mat-divider vertical="true"></mat-divider><mat-divider vertical="true"></mat-divider>
+  <asl-google-signin-button (click)="loginWithGoogle()"></asl-google-signin-button>
+  </div>
   <br>
   <br>
   <button mat-raised-button color="accent" routerLink="/user/register" class="mat-form-field">Registruj se!</button>

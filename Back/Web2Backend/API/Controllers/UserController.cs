@@ -107,5 +107,19 @@ namespace API.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpPost]
+        [Route("socialLogin")]
+        public IActionResult SocialLogin(SocialLoginDto data)
+        {
+            try
+            {
+                return Ok(_userService.SocialLogin(data));
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

@@ -15,5 +15,6 @@ namespace ServiceLayer.Interfaces
         List<UserDto> GetDostavljace();
         UserDto Verifikuj(VerifikacijaDto info);
         UserDto IzmeniUsera(UserIzmenaDto izmena);
+        TokenDto SocialLogin(SocialLoginDto data);
     }
 }

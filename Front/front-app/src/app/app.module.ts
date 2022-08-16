@@ -53,6 +53,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { PotvrdiPorudzbinuComponent } from './porudzbina/napravi-porudzbinu/potvrdi-porudzbinu/potvrdi-porudzbinu.component';
+import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialAuthServiceConfig, SocialLoginModule } from '@abacritt/angularx-social-login';
 
 @NgModule({
   declarations: [
@@ -101,7 +102,8 @@ import { PotvrdiPorudzbinuComponent } from './porudzbina/napravi-porudzbinu/potv
     ToastrModule.forRoot({
       progressBar : true
     }),
-    OAuthModule.forRoot() 
+    OAuthModule.forRoot(),
+    SocialLoginModule
   ],
   providers: [
     UserService,
@@ -117,7 +119,29 @@ import { PotvrdiPorudzbinuComponent } from './porudzbina/napravi-porudzbinu/potv
     AdminGuardGuard,
     PotrosacGuard,
     AdminPotrosacGuard,
-    PotrosacDostavljacGuard
+    PotrosacDostavljacGuard,
+    SocialAuthService,
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+        {
+          id: FacebookLoginProvider.PROVIDER_ID,
+          provider: new FacebookLoginProvider(
+            '3560883207472171'
+          )
+        },
+        {
+          id:GoogleLoginProvider.PROVIDER_ID,
+          provider: new GoogleLoginProvider('952457754106-69nre20ps1nt7ltbntggqt9aal4c4mob.apps.googleusercontent.com')
+        }
+        ],
+        onError:(err:any) => {
+          console.error(err);
+        }
+      } as SocialAuthServiceConfig
+    }
   ],
   bootstrap: [AppComponent]
 })

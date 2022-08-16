@@ -1,3 +1,4 @@
+import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from 'src/environments/environment';
@@ -7,7 +8,7 @@ import { environment } from 'src/environments/environment';
 })
 export class AuthService {
 
-  constructor(private jwt:JwtHelperService) { }
+  constructor(private jwt:JwtHelperService, private authService: SocialAuthService) { }
 
   isUserLoggedIn():boolean{
     let token = sessionStorage.getItem('token');
@@ -59,6 +60,7 @@ export class AuthService {
 
   logout(){
     sessionStorage.clear();
+    this.authService.signOut();
     localStorage.clear();
   }
 }

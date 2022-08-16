@@ -7,20 +7,39 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { GoogleApiService } from 'src/app/shared/services/google-api.service';
+import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
-})
-export class LoginComponent implements OnInit {
+}) export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
   
-  constructor(private service:UserService, private formBuilder: FormBuilder, private toastr: ToastrService,
-     private auth:AuthService, private router:Router, private google: GoogleApiService,
-     private snackBar:MatSnackBar) { }
+  constructor(private service:UserService, private formBuilder: FormBuilder,
+     private auth:AuthService, private router:Router, private snackBar:MatSnackBar,
+     private authService: SocialAuthService) {    
+       this.authService.authState.subscribe((data) => {
+        if(data != null){
+        this.service.socialLogin(data).subscribe(
+          (data) =>{
+            sessionStorage.setItem('token', data.token);
+            this.router.navigateByUrl('porudzbina/poruci');
+          },
+          (error) => {
+            console.log(error);
+            this.snackBar.open("Doslo je do greske prilikom pokusaja logovanja sa Googlom!", "", { duration: 2000,});
+          }
+        );
+        }
+   },
+    (error) => {
+      console.log(error);
+    })
+  }
+
+  socialUser: SocialUser = new SocialUser;
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -50,6 +69,8 @@ export class LoginComponent implements OnInit {
       }
     }
 
+
+
   }
 
   onSubmit(){
@@ -70,7 +91,7 @@ export class LoginComponent implements OnInit {
     )
   }
 
-  googleLogin(){
-    this.google.startLogin();
+  loginWithGoogle(){
+    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
   }
 }

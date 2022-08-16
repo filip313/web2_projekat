@@ -73,5 +73,10 @@ namespace DataLayer.Repos
 
             return path;
         }
+
+        public User GetUserByEmail(string email)
+        {
+            return _db.Users.Where(x => x.Email == email).FirstOrDefault();
+        }
     }
 }

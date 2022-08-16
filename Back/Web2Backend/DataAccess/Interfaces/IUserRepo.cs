@@ -17,5 +17,6 @@ namespace DataLayer.Interfaces
         void SaveChangedData(User user);
         List<User> GetDostavljace();
         string SaveImage(IFormFile slika, string username);
+        User GetUserByEmail(string email);
     }
 }
