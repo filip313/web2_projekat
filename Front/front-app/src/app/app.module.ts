@@ -54,6 +54,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { PotvrdiPorudzbinuComponent } from './porudzbina/napravi-porudzbinu/potvrdi-porudzbinu/potvrdi-porudzbinu.component';
 import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialAuthServiceConfig, SocialLoginModule } from '@abacritt/angularx-social-login';
+import { PorudzbineMapaComponent } from './porudzbina/nove-porudzbine/porudzbine-mapa/porudzbine-mapa.component';
+import { GeocodingService } from './shared/services/geocoding.service';
 
 @NgModule({
   declarations: [
@@ -75,6 +77,7 @@ import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialAu
     NovePorudzbineComponent,
     NavbarComponent,
     PotvrdiPorudzbinuComponent,
+    PorudzbineMapaComponent,
   ],
   imports: [
     BrowserModule,
@@ -141,7 +144,8 @@ import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialAu
           console.error(err);
         }
       } as SocialAuthServiceConfig
-    }
+    },
+    GeocodingService
   ],
   bootstrap: [AppComponent]
 })

@@ -9,6 +9,7 @@ export const environment = {
   imageDisplayPrefix : "data:image/jpeg;base64,", 
   userRoleKey: "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
   cenaDostave: 300,
+  geocodingKey: '37133c73c8ee46f48d6947eefb7d92e9',
 };
 
 /*

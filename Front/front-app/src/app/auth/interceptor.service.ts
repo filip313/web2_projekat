@@ -13,8 +13,9 @@ export class InterceptorService implements HttpInterceptor{
   constructor(private router: Router, private snackBar:MatSnackBar) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    
-    if(sessionStorage.getItem('token') != null){
+    console.log(req); 
+
+    if(sessionStorage.getItem('token') != null && !req.url.includes('api.geoapify.com')){
       const cloneReq = req.clone({
         headers: req.headers.set('Authorization', 'Bearer ' + sessionStorage.getItem('token'))
       });

@@ -19,6 +19,7 @@ import { environment } from 'src/environments/environment';
 import { AdminPotrosacGuard } from './auth/guards/admin-potrosac.guard';
 import { PotrosacDostavljacGuard } from './auth/guards/potrosac-dostavljac.guard';
 import { DostavljacGuard } from './auth/guards/dostavljac.guard';
+import { PorudzbineMapaComponent } from './porudzbina/nove-porudzbine/porudzbine-mapa/porudzbine-mapa.component';
 
 const routes: Routes = [
   {
@@ -52,6 +53,7 @@ const routes: Routes = [
       { path: 'poruci', component:NapraviPorudzbinuComponent, canActivate:[PotrosacGuard]},
       { path: 'trenutna', component:TrenutnaPorudzbinaComponent, canActivate:[PotrosacDostavljacGuard]},
       { path: 'nove', component:NovePorudzbineComponent , canActivate:[DostavljacGuard]},
+      { path: 'mapa', component:PorudzbineMapaComponent, canActivate: [DostavljacGuard]},
     ]
   }
 ];
