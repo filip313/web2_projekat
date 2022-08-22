@@ -47,8 +47,15 @@
                 <br>
             <mat-divider></mat-divider>
             <form [formGroup]="forma" mb-4 autocomplete="off">
-                <mat-form-field>
-                    <input matInput placeholder="Adresa" formControlName="adresa">
+                <mat-form-field appearance="fill">
+                    <input matInput placeholder="Ulica" formControlName="ulica" >
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+
+                    <input matInput placeholder="Broj" formControlName="broj" type="number">
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <input matInput placeholder="Grad" formControlName="grad">
                 </mat-form-field>
                 <br>
                 <mat-form-field>

@@ -1,4 +1,56 @@
-<p> jedi govna</p>
-<div id="mapa-div">
+<div class="main">
+<mat-card class="wraper">
+    <mat-card-header>
+        <mat-card-title>
+            Mapa porudzbina
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div id="mapa-div"></div>
+    </mat-card-content>
+</mat-card>
 
+<mat-card class="wraper detalji">
+    <mat-card-header>
+        <mat-card-title>
+            Izabrana porudzbina
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div *ngIf="izabranaPorudzbina != null">
+           <mat-list>
+                <div mat-subheader>Id</div>
+                <mat-list-item>
+                    {{ izabranaPorudzbina.id }}
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <div mat-subheader>Potrosac</div>
+                <mat-list-item>
+                    {{ izabranaPorudzbina.narucilac.username }}
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <div mat-subheader>Adresa</div>
+                <mat-list-item>
+                    {{ izabranaPorudzbina.adresa }}
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <div mat-subheader>Ukupna cena</div>
+                <mat-list-item>
+                    {{ izabranaPorudzbina.cena }}
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <div mat-subheader>Komentar</div>
+                <mat-list-item>
+                    {{ izabranaPorudzbina.komentar }}
+                </mat-list-item>
+                <mat-divider></mat-divider>
+           </mat-list> 
+        </div>
+    </mat-card-content>
+    <mat-card-actions>
+        <div *ngIf="izabranaPorudzbina != null">
+            <button mat-raised-button color="primary" (click)="prihvatiPorudzbinu()">Prihvati porudzbinu</button>
+        </div>
+    </mat-card-actions>
+</mat-card>
 </div>

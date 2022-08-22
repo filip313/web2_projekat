@@ -38,9 +38,17 @@ export class NapraviPorudzbinuComponent implements OnInit {
 
   ngOnInit(): void {
     this.forma = this.formBuilder.group({
-      adresa:['',[
+      ulica:['',[
         Validators.required,
         Validators.minLength(10),
+      ]],
+      broj: ['',[
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(3),
+      ]],
+      grad: ['',[
+        Validators.required
       ]],
       komentar:['', [
 
@@ -88,7 +96,10 @@ export class NapraviPorudzbinuComponent implements OnInit {
 
   fillTestOrder():NovaPorudzbina{
     let data = new NovaPorudzbina();
-    data.adresa = this.forma.controls['adresa'].value;
+    let ulica = this.forma.controls['ulica'].value;
+    let broj = this.forma.controls['broj'].value;
+    let grad = this.forma.controls['grad'].value;
+    data.adresa = ulica + ' ' + broj + ', ' + grad; 
     data.komentar = this.forma.controls['komentar'].value;
     data.cena = this.ukupnaCena() + this.dostava;
     data.cenaDostave = this.dostava;

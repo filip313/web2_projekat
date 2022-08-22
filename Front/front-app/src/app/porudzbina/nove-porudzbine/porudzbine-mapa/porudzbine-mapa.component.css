@@ -1,4 +1,27 @@
 #mapa-div {
-    height: 400px;
-    width: 400px;
+    height: 600px;
+    width: 800px;
   }
+
+.mat-card{
+  width:fit-content;
+}
+
+.wraper{
+  float:left;
+  margin-top:50px;
+  margin-right: 50px;
+}
+
+.main{
+  display:flex;
+  justify-content: center;
+}
+
+.detalji{
+  width: 400px;
+}
+
+button{
+  width: 100%;
+}

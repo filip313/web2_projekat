@@ -13,9 +13,12 @@ import TileLayer from 'ol/layer/Tile';
 import VectorSource from 'ol/source/Vector';
 import { Feature } from 'ol';
 import { Point } from 'ol/geom';
-import { StickyStyler } from '@angular/cdk/table';
 import { FeatureLike } from 'ol/Feature';
 import { GeocodingService } from 'src/app/shared/services/geocoding.service';
+import { Porudzbina } from 'src/app/shared/models/porudzbina.model';
+import { PrihvatiPorudzbinu } from 'src/app/shared/models/prihavtiporudzbinu.model';
+import { AuthService } from 'src/app/auth/auth.service';
+
 @Component({
   selector: 'app-porudzbine-mapa',
   templateUrl: './porudzbine-mapa.component.html',
@@ -24,7 +27,7 @@ import { GeocodingService } from 'src/app/shared/services/geocoding.service';
 export class PorudzbineMapaComponent implements OnInit {
 
   constructor(private snackBar:MatSnackBar, private service: PorudzbinaService,
-    private router:Router, private geoService: GeocodingService) { }
+    private router:Router, private geoService: GeocodingService, private auth: AuthService) { }
 
   ngOnInit(): void {
     this.map = new OlMap({
@@ -50,42 +53,28 @@ export class PorudzbineMapaComponent implements OnInit {
       })
     })
     this.map.addLayer(markeri_vektor);
-    let feature1 = new Feature(new Point(
-            olProj.fromLonLat([19.834833045756262, 45.254221659981575],
-              this.map.getView().getProjection())));
-    markeri_vektor.getSource()?.addFeature(feature1);
-    let feature2 =new Feature(new Point(
-            olProj.fromLonLat([19.8354709377982, 45.255628953514524],
-              this.map.getView().getProjection())));
-    markeri_vektor.getSource()?.addFeature(feature2);
-    
-    this.markeri.set(feature1, "prvi marker");
-    this.markeri.set(feature2, "drugi marker");
-
-    this.service.getNovePorudzbine().subscribe(
-      (data) => {
-        data.forEach((value, index) => {
-          let projetion = this.map.getView().getProjection();
-          let source = markeri_vektor.getSource();
-          this.geoService.getCoords(value.adresa).subscribe(
-            (data) => {
-              console.log(data);
-              let temp_feature = new Feature(new Point(
-                olProj.fromLonLat([data.results[1].lon, data.results[1].lat], projetion)));
-              this.markeri.set(temp_feature, value.id.toString());
-              source?.addFeature(temp_feature);
-            },
-            (error) => {
-              console.log(error);
-            }
-          )
-        })
-
-      },
-      (error) => {
-        this.router.navigateByUrl('user/login');
-      }
-    )
+      this.service.getNovePorudzbine().subscribe(
+        (data) => {
+          data.forEach((value, index) => {
+            let projetion = this.map.getView().getProjection();
+            let source = markeri_vektor.getSource();
+            this.geoService.getCoords(value.adresa).subscribe(
+              (data) => {
+                console.log(data);
+                let temp_feature = new Feature(new Point(
+                  olProj.fromLonLat([data.results[0].lon, data.results[0].lat], projetion)));
+                this.markeri.set(temp_feature, value);
+                source?.addFeature(temp_feature);
+              },
+              (error) => {
+                console.log(error);
+              }
+            )
+          })
+        },
+        (error) => {
+          this.router.navigateByUrl('user/login');
+        });
 
     this.map.on('click', (event) => {
       let feature = this.map.forEachFeatureAtPixel(event.pixel, (feature, layer) =>{
@@ -93,16 +82,34 @@ export class PorudzbineMapaComponent implements OnInit {
         return feature;
       })
 
-
       if(feature != null && feature !== undefined){
         if(this.markeri.has(feature)){
-          console.log(this.markeri.get(feature))
+          this.izabranaPorudzbina = this.markeri.get(feature);
+          console.log(this.izabranaPorudzbina);
         }
       }
+      else{
+        this.izabranaPorudzbina = null;
+      } 
     })
   }
 
-  map:OlMap;
-  markeri = new Map<FeatureLike, string>();
+  prihvatiPorudzbinu(){
+    let data = new PrihvatiPorudzbinu();
+    data.dostavljacId = this.auth.getUserId();
+    data.porudzbinaId = this.izabranaPorudzbina.id;
+    this.service.prihvatiPorudzbinu(data).subscribe(
+      (data) => {
+        this.router.navigateByUrl('/porudzbina/trenutna');
+        this.snackBar.open("Porudzbina uspesno prihvacena", "", {duration: 2000});
+      },
+      (error) => {
+        this.snackBar.open(error.error, "", {duration: 2000});
+      }
+    );
+  }
 
+  map:OlMap;
+  markeri = new Map<FeatureLike, Porudzbina>();
+  izabranaPorudzbina :any= null;
 }

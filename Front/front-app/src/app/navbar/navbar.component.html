@@ -19,6 +19,7 @@
     </span>
     <span *ngIf="ulogovan && dostavljac">
         <a mat-raised-button routerLink="/porudzbina/nove">Nove porudzbine</a>
+        <a mat-raised-button routerLink="/porudzbina/mapa">Mapa porudzbina</a>
     </span>
     <span *ngIf="ulogovan" (click)="osvezi()">
         <a mat-raised-button routerLink="/user/change" color="accent">Profil</a>

@@ -97,7 +97,7 @@ namespace ServiceLayer.Services
                 }
             }
             int minuti = new Random().Next(15, 70);
-            TimeSpan trajanjeDostave = new TimeSpan(0, minuti, 0);
+            TimeSpan trajanjeDostave = new TimeSpan(0, 0, minuti);
             DateTime vremePrihvata = DateTime.Now;
 
             porudzbina.TrajanjeDostave = trajanjeDostave;
